@@ -1,0 +1,37 @@
+# Git attributes
+#
+# See
+# - git help attributes
+# - https://git-scm.com/docs/gitattributes
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Pure text files: Use LF in repo and checkout
+*.c text eol=lf
+*.cfg text eol=lf
+*.in text eol=lf
+*.ini text eol=lf
+*.md text eol=lf
+*.proto text eol=lf
+*.puml text eol=lf
+*.py text eol=lf
+*.rst text eol=lf
+*.sh text eol=lf
+*.txt text eol=lf
+*.typed text eol=lf
+*.yml text eol=lf
+.editorconfig text eol=lf
+.gitattributes text eol=lf
+.gitignore text eol=lf
+.pylintrc text eol=lf
+Jenkinsfile* text eol=lf
+Pipfile* text eol=lf
+pylintrc text eol=lf
+
+# Binary/DOS files: Don't treat as text
+*.bat -text
+*.desc -text
+*.exe -text
+*.inv -text
+*.png -text
