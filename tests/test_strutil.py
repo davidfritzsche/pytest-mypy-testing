@@ -1,6 +1,6 @@
 import pytest
 
-from pytest_mypy_testing.strutil import common_prefix
+from pytest_mypy_testing.strutil import common_prefix, dedent
 
 
 @pytest.mark.parametrize(
@@ -15,4 +15,16 @@ from pytest_mypy_testing.strutil import common_prefix
 )
 def test_common_prefix(a: str, b: str, expected: str):
     actual = common_prefix(a, b)
+    assert actual == expected
+
+
+def test_dedent():
+    input = """
+    foo
+    bar
+        baz
+    """
+
+    expected = "foo\nbar\n    baz\n"
+    actual = dedent(input)
     assert actual == expected
