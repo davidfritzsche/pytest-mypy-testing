@@ -1,0 +1,12 @@
+# -*- mode: python; -*-
+
+import pytest
+
+
+a = 123
+a = "abc"  # mypy error not covered by the test case below
+
+
+@pytest.mark.xfail
+def mypy_xfail_unexpected_note():
+    """Test case that fails due to not covered non-item error above."""

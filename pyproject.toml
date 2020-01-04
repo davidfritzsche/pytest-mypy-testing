@@ -1,0 +1,52 @@
+[build-system]
+requires = ["flit_core >=2,<3"]
+build-backend = "flit_core.buildapi"
+
+[tool.flit.metadata]
+module = "pytest_mypy_testing"
+author = "David Fritzsche"
+author-email = "david.fritzsche@mvua.de"
+classifiers = [
+    "Framework :: Pytest",
+    "Intended Audience :: Developers",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Operating System :: POSIX",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "License :: OSI Approved :: MIT License",
+]
+description-file = "README.md"
+dist-name = "pytest-mypy-testing"
+home-page = "https://github.com/davidfritzsche/pytest-mypy-testing"
+license = "MIT"
+requires = [
+    "pytest",
+    "mypy",
+]
+requires-python = "~=3.6"
+
+[tool.flit.entrypoints.pytest11]
+mypy-testing = "pytest_mypy_testing.plugin"
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38']
+include = '\.pyi?$'
+exclude = '''
+(
+    /\.eggs/
+  | /\.git/
+  | /\.hg/
+  | /\.mypy_cache/
+  | /\.tox/
+  | /\.venv/
+  | /_build/
+  | /_version\.py
+  | /buck-out/
+  | /build/
+  | /dist/
+)
+'''

@@ -1,0 +1,50 @@
+# See https://EditorConfig.org
+#
+# PyCharm support:
+# - https://www.jetbrains.com/help/pycharm/configuring-code-style.html#editorconfig
+#
+# Visual Studio Code:
+# - https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
+# - https://github.com/editorconfig/editorconfig-vscode
+#
+# Emacs:
+# - https://github.com/editorconfig/editorconfig-emacs#readme
+
+# top-most EditorConfig file
+root = true
+
+[*.{cfg,ini,py,proto,sh}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[{.editorconfig,MANIFEST.in,Pipfile}]
+charset = utf-8
+indent_style = space
+indent_size = 4
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# No indent_size
+[*.{rst,txt,yml}]
+charset = utf-8
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Do not trim trailing whitespace
+[*.md]
+charset = utf-8
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = false
+
+# CRLF line endings
+[*.bat]
+end_of_line = crlf

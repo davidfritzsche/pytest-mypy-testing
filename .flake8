@@ -1,0 +1,29 @@
+# -*- mode: conf; -*-
+[flake8]
+exclude =
+    *.egg-info
+    .eggs
+    .build
+    .git
+    .tox
+    .venv
+    build
+    dist
+    docs
+    downloads
+    generated
+    venv
+    src/prettypb/protobuf/*.py
+    runtime/src/prettypb/protobuf/*.py
+
+ignore =
+    F811 # redefinition of unused '...' from line ...
+    W503 # line break before binary operator
+    E203 # whitespace before ':'
+    E231 # missing whitespace after ','
+    E501 # line too long
+    E731 # do not assign a lambda expression, use a def
+
+builtins = reveal_type
+
+max-line-length = 88
