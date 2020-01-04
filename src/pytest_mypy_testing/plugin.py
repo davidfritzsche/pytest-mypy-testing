@@ -37,6 +37,7 @@ class PytestMypyTestItem(pytest.Item):
         mypy_item: MypyTestItem,
     ) -> None:
         super().__init__(name, parent, config)
+        self.add_marker("mypy")
         self.mypy_item = mypy_item
         for mark in self.mypy_item.marks:
             self.add_marker(mark)
@@ -82,6 +83,7 @@ class PytestMypyFile(pytest.File):
         self, fspath: LocalPath, parent=None, config=None, session=None, nodeid=None,
     ) -> None:
         super().__init__(fspath, parent, config, session, nodeid)
+        self.add_marker("mypy")
         self.mypy_file = parse_file(self.fspath)
         self._mypy_result: Optional[MypyResult] = None
 
@@ -153,12 +155,28 @@ class PytestMypyFile(pytest.File):
 def pytest_collect_file(path: LocalPath, parent):
     import builtins
 
+    # Add a reveal_type function to the builtins module
     if not hasattr(builtins, "reveal_type"):
         setattr(builtins, "reveal_type", lambda x: x)
 
     config = getattr(parent, "config", None)
 
-    if path.ext in (".mypy", ".py") and path.basename.startswith("test_"):
-        return PytestMypyFile(path, parent=parent, config=config)
+    if path.ext in (".mypy-testing", ".py") and path.basename.startswith("test_"):
+        file = PytestMypyFile(path, parent=parent, config=config)
+        if file.mypy_file.items:
+            return file
     else:
-        return None
+        return None  # pragma: no cover
+
+
+def pytest_configure(config):
+    """
+    Register a custom marker for MypyItems,
+    and configure the plugin based on the CLI.
+    """
+    config.addinivalue_line(
+        "markers", "mypy_testing: mark functions to be used for mypy testing."
+    )
+    config.addinivalue_line(
+        "markers", "mypy: mark mypy tests. Do not add this marker manually!"
+    )

@@ -9,6 +9,7 @@ from pytest_mypy_testing.parser import (
     generate_per_line_token_lists,
     parse_file,
 )
+from pytest_mypy_testing.strutil import dedent
 
 
 @pytest.mark.parametrize("node", [None, 123, "abc"])
@@ -18,8 +19,14 @@ def test_cannot_create_mypy_test_case_from_ast_node_without_valid_node(node):
 
 
 def test_create_mypy_test_case():
-    func = "\n".join(
-        ["@pytest.mark.skip()", "@foo.bar", "def mypy_foo():", "    pass", ""]
+    func = dedent(
+        r"""
+        @pytest.mark.mypy_testing
+        @pytest.mark.skip()
+        @foo.bar
+        def mypy_foo():
+            pass
+        """
     )
     tree = ast.parse(func, "func.py")
 
@@ -32,7 +39,6 @@ def test_create_mypy_test_case():
     tc = MypyTestItem.from_ast_node(func_nodes[0])
 
     assert tc.lineno == 1
-    assert "skip" in tc.marks
 
 
 def test_iter_comments():
@@ -65,11 +71,16 @@ def test_iter_comments():
 def test_parse_file_basic_call_works_with_py37(monkeypatch, tmp_path):
     path = tmp_path / "parse_file_test.py"
     path.write_text(
-        "# foo\n"
-        "def test_mypy_foo():\n"
-        "    pass\n"
-        "def test_mypy_bar():\n"
-        "    pass\n"
+        dedent(
+            r"""
+            # foo
+            def test_mypy_foo():
+                pass
+            @pytest.mark.mypy_testing
+            def test_mypy_bar():
+                pass
+            """
+        )
     )
 
     monkeypatch.setattr(sys, "version_info", (3, 7, 5))

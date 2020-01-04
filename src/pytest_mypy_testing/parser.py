@@ -7,7 +7,7 @@ import itertools
 import os
 import sys
 import tokenize
-from typing import Iterable, Iterator, List, Optional, Tuple
+from typing import Iterable, Iterator, List, Optional, Set, Tuple
 
 from .message import Message
 
@@ -22,13 +22,14 @@ class MypyTestItem:
     end_lineno: int
     expected_messages: List[Message]
     func_node: Optional[ast.FunctionDef] = None
-    marks: List[str] = dataclasses.field(default_factory=lambda: [])
+    marks: Set[str] = dataclasses.field(default_factory=lambda: set())
     actual_messages: List[Message] = dataclasses.field(default_factory=lambda: [])
 
     @classmethod
     def from_ast_node(
         cls,
         func_node: ast.FunctionDef,
+        marks: Optional[Set[str]] = None,
         unfiltered_messages: Optional[Iterable[Message]] = None,
     ) -> "MypyTestItem":
         if not isinstance(func_node, ast.FunctionDef):
@@ -41,22 +42,21 @@ class MypyTestItem:
 
         for node in func_node.decorator_list:
             lineno = min(lineno, node.lineno)
-        marks = _find_marks(func_node)
 
         if unfiltered_messages is not None:
-            filtered_messages = [
+            expected_messages = [
                 msg for msg in unfiltered_messages if lineno <= msg.lineno <= end_lineno
             ]
         else:
-            filtered_messages = []
+            expected_messages = []
 
         return cls(
             name=func_node.name,
             lineno=lineno,
             end_lineno=end_lineno,
-            expected_messages=filtered_messages,
+            expected_messages=expected_messages,
             func_node=func_node,
-            marks=marks,
+            marks=(marks or set()),
         )
 
 
@@ -115,14 +115,18 @@ def parse_file(filename: str) -> MypyTestFile:
     if sys.version_info < (3, 8):
         _add_end_lineno_if_missing(tree, len(source_lines))
 
-    testcase_nodes = [
-        node
-        for node in ast.iter_child_nodes(tree)
-        if isinstance(node, ast.FunctionDef)
-        and any(node.name.startswith(pre) for pre in ["mypy_", "test_mypy_"])
-    ]
+    items: List[MypyTestItem] = []
 
-    items = [MypyTestItem.from_ast_node(node, messages) for node in testcase_nodes]
+    for node in ast.iter_child_nodes(tree):
+        if not isinstance(node, ast.FunctionDef):
+            continue
+        marks = _find_marks(node)
+        if "mypy_testing" in marks:
+            items.append(
+                MypyTestItem.from_ast_node(
+                    node, marks=marks, unfiltered_messages=messages
+                )
+            )
 
     return MypyTestFile(
         filename=filename, source_lines=source_lines, items=items, messages=messages,
@@ -140,16 +144,12 @@ def _add_end_lineno_if_missing(tree, line_count: int):
         setattr(prev_node, "end_lineno", line_count)
 
 
-def _find_marks(func_node: ast.FunctionDef) -> List[str]:
-    marks = []
-
-    for name, node in _iter_func_decorators(func_node):
-        if name == "pytest.mark.skip":
-            marks.append("skip")
-        elif name == "pytest.mark.xfail":
-            marks.append("xfail")
-
-    return marks
+def _find_marks(func_node: ast.FunctionDef) -> Set[str]:
+    return set(
+        name.split(".", 2)[2]
+        for name, _ in _iter_func_decorators(func_node)
+        if name.startswith("pytest.mark.")
+    )
 
 
 def _iter_func_decorators(func_node: ast.FunctionDef) -> Iterator[Tuple[str, ast.AST]]:
