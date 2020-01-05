@@ -68,6 +68,6 @@ def publish(ctx, repository="testpypi"):
     ctx.run(cmd, echo=True, pty=True)
 
 
-@task(pre=[mypy, pytest, flake8, black])
+@task(pre=[mypy, pytest, flake8])
 def check(ctx):
     pass

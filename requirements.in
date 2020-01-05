@@ -1,5 +1,6 @@
 black==19.10b0
 bump2version
+flake8-black
 flake8-isort
 flit
 flit_core>=2,<3
