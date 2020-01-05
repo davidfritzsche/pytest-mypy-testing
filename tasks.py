@@ -47,8 +47,10 @@ def black_reformat(ctx):
 
 
 @task
-def lock_requirements(ctx):
+def lock_requirements(ctx, upgrade=False):
     cmd = "pip-compile --allow-unsafe --no-index"
+    if upgrade:
+        cmd += " --upgrade"
     ctx.run(cmd, env={"CUSTOM_COMPILE_COMMAND": cmd}, echo=True, pty=True)
 
 
