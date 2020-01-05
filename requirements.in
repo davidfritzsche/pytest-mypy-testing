@@ -1,5 +1,5 @@
 black==19.10b0
-dataclasses
+bump2version
 flake8-isort
 flit
 flit_core>=2,<3
@@ -10,7 +10,5 @@ pip>=19.3
 pytest-cov
 pytest~=5.3
 setuptools>=43
-sphinx
 tox-pyenv
 tox>=3.14.3
-twine
