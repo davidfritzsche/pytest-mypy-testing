@@ -54,6 +54,20 @@ def lock_requirements(ctx, upgrade=False):
     ctx.run(cmd, env={"CUSTOM_COMPILE_COMMAND": cmd}, echo=True, pty=True)
 
 
+@task
+def build(ctx):
+    result = ctx.run("git show -s --format=%ct HEAD")
+    timestamp = result.stdout.strip()
+    cmd = "flit build"
+    ctx.run(cmd, env={"SOURCE_DATE_EPOCH": timestamp}, echo=True, pty=True)
+
+
+@task
+def publish(ctx, repository="testpypi"):
+    cmd = "flit publish --repository=%s" % (repository,)
+    ctx.run(cmd, echo=True, pty=True)
+
+
 @task(pre=[mypy, pytest, flake8, black])
 def check(ctx):
     pass
