@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: David Fritzsche
+# SPDX-License-Identifier: CC0-1.0
+
 import ast
 import sys
 from tokenize import COMMENT, ENDMARKER, NAME, NEWLINE, NL, TokenInfo

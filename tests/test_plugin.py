@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: David Fritzsche
+# SPDX-License-Identifier: CC0-1.0
+
 from types import SimpleNamespace
 
 import pytest

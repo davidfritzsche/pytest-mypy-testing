@@ -1,4 +1,11 @@
-![GitHub Action Status](https://github.com/davidfritzsche/pytest-mypy-testing/workflows/Python%20package/badge.svg)
+<!--
+SPDX-FileCopyrightText: David Fritzsche
+SPDX-License-Identifier: CC0-1.0
+-->
+[![PyPI](https://img.shields.io/pypi/v/pytest-mypy-testing.svg)](https://pypi.python.org/pypi/pytest-mypy-testing)
+[![GitHub Action Status](https://github.com/davidfritzsche/pytest-mypy-testing/workflows/Python%20package/badge.svg)](https://github.com/davidfritzsche/pytest-mypy-testing/actions)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
 # pytest-mypy-testing — Plugin to test mypy output with pytest

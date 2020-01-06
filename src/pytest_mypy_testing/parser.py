@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: 2020 David Fritzsche
+# SPDX-License-Identifier: Apache-2.0 OR MIT
 """Parse a Python file to determine the mypy test cases."""
 
 import ast

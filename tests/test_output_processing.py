@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: David Fritzsche
+# SPDX-License-Identifier: CC0-1.0
+
 import pytest
 
 from pytest_mypy_testing.message import Message, Severity

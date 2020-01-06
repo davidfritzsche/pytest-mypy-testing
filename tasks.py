@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: David Fritzsche
+# SPDX-License-Identifier: CC0-1.0
+
 import os
 
 from invoke import task
@@ -39,6 +42,11 @@ def pytest(ctx):
 @task
 def black(ctx):
     ctx.run("black --check --diff .", echo=True, pty=True)
+
+
+@task
+def reuse_lint(ctx):
+    ctx.run("reuse lint", echo=True, pty=True)
 
 
 @task
