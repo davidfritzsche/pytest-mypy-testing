@@ -122,6 +122,7 @@ class PytestMypyFile(pytest.File):
                 "--no-silence-site-packages",
                 "--no-error-summary",
                 "--no-pretty",
+                "--no-color-output",
                 "--hide-error-context",
                 "--cache-dir={}".format(mypy_cache_dir),
                 str(filename),

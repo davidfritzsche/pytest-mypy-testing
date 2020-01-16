@@ -37,6 +37,15 @@ _string_to_severity = {
     "E": Severity.ERROR,
 }
 
+_COMMENT_MESSAGES = frozenset(
+    [
+        (
+            Severity.NOTE,
+            "See https://mypy.readthedocs.io/en/latest/running_mypy.html#missing-imports",
+        ),
+    ]
+)
+
 
 @dataclasses.dataclass
 class Message:
@@ -56,7 +65,7 @@ class Message:
         r"^(?:# *type: *ignore *)?(?:# *)?"
         r"(?P<severity>[RENW]):"
         r"((?P<colno>\d+):)? *"
-        r"(?P<message>.*)$"
+        r"(?P<message>[^#]*)(?:#.*?)?$"
     )
 
     OUTPUT_RE = re.compile(
@@ -66,6 +75,21 @@ class Message:
         r" *(?P<severity>(error|note|warning)):"
         r"(?P<message>.*)$"
     )
+
+    def astuple(self) -> "Message.TupleType":
+        return (
+            self.filename,
+            self.lineno,
+            self.colno,
+            self.severity,
+            self.message,
+        )
+
+    def is_comment(self) -> bool:
+        return (self.severity, self.message) in _COMMENT_MESSAGES
+
+    def _as_short_tuple(self) -> "Message.TupleType":
+        return (self.filename, self.lineno, None, self.severity, self.message)
 
     def __post_init__(self):
         parts = [self.filename, str(self.lineno)]
@@ -85,18 +109,6 @@ class Message:
     def __hash__(self) -> int:
         return hash(self._as_short_tuple())
 
-    def _as_short_tuple(self) -> "Message.TupleType":
-        return (self.filename, self.lineno, None, self.severity, self.message)
-
-    def astuple(self) -> "Message.TupleType":
-        return (
-            self.filename,
-            self.lineno,
-            self.colno,
-            self.severity,
-            self.message,
-        )
-
     def __str__(self) -> str:
         return f"{self._prefix} {self.severity.name.lower()}: {self.message}"
 
@@ -107,10 +119,9 @@ class Message:
         if not m:
             raise ValueError("Not a valid mypy message comment")
         colno = int(m.group("colno")) if m.group("colno") else None
+        message = m.group("message").strip()
         if m.group("severity") == "R":
-            message = "Revealed type is {!r}".format(m.group("message"))
-        else:
-            message = m.group("message")
+            message = "Revealed type is {!r}".format(message)
         return Message(
             filename,
             lineno=lineno,

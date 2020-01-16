@@ -5,6 +5,11 @@ import pytest
 
 
 @pytest.mark.mypy_testing
+def err():
+    import foo  # E: Cannot find implementation or library stub for module named 'foo'  # noqa
+
+
+@pytest.mark.mypy_testing
 def test_invalid_assginment():
     """An example test function to be both executed and mypy-tested"""
     foo = "abc"
