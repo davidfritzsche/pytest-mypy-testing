@@ -12,7 +12,7 @@ author-email = "david.fritzsche@mvua.de"
 classifiers = [
     "Framework :: Pytest",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apple Public Source License",
+    "License :: OSI Approved :: Apache Software License",
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
