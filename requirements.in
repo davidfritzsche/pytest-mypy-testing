@@ -12,7 +12,8 @@ mypy==0.770
 pip-tools
 pip>=19.3
 pytest-cov
-pytest~=5.3.5
+pytest-html
+pytest~=5.4.1
 setuptools>=43
 tox-pyenv
 tox>=3.14.3

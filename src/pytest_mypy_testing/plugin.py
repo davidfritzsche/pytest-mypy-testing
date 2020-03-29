@@ -16,6 +16,10 @@ from .output_processing import OutputMismatch, diff_message_sequences
 from .parser import MypyTestItem, parse_file
 
 
+PYTEST_VERSION = pytest.__version__
+PYTEST_VERISON_INFO = tuple(int(part) for part in PYTEST_VERSION.split("."))
+
+
 class MypyResult(NamedTuple):
     mypy_args: List[str]
     returncode: int
@@ -36,14 +40,26 @@ class PytestMypyTestItem(pytest.Item):
         self,
         name: str,
         parent: "PytestMypyFile",
-        config: Config,
+        *,
         mypy_item: MypyTestItem,
+        config: Optional[Config] = None,
     ) -> None:
-        super().__init__(name, parent, config)
+        if config is None:
+            config = parent.config
+        super().__init__(name, parent=parent, config=config)
         self.add_marker("mypy")
         self.mypy_item = mypy_item
         for mark in self.mypy_item.marks:
             self.add_marker(mark)
+
+    @classmethod
+    def from_parent(cls, parent, name, mypy_item):
+        if PYTEST_VERISON_INFO < (5, 4):
+            return cls(
+                parent=parent, name=name, config=parent.config, mypy_item=mypy_item
+            )
+        else:
+            return super().from_parent(parent=parent, name=name, mypy_item=mypy_item)
 
     def runtest(self) -> None:
         returncode, actual_messages = self.parent.run_mypy(self.mypy_item)
@@ -59,44 +75,55 @@ class PytestMypyTestItem(pytest.Item):
         return self.parent.fspath, self.mypy_item.lineno, self.name
 
     def repr_failure(self, excinfo, style=None):
-        if excinfo.errisinstance(MypyAssertionError):
-            exception_repr = excinfo.getrepr(style="short")
-            exception_repr.reprcrash.message = ""
-            exception_repr.reprtraceback.reprentries = [
-                ReprEntry(
-                    filelocrepr=ReprFileLocation(
+        if not excinfo.errisinstance(MypyAssertionError):
+            return super().repr_failure(excinfo, style=style)  # pragma: no cover
+        reprfileloc_key = (
+            "filelocrepr" if PYTEST_VERISON_INFO < (5, 4) else "reprfileloc"
+        )
+        exception_repr = excinfo.getrepr(style="short")
+        exception_repr.reprcrash.message = ""
+        exception_repr.reprtraceback.reprentries = [
+            ReprEntry(
+                lines=mismatch.lines,
+                style="short",
+                reprlocals=None,
+                reprfuncargs=None,
+                **{
+                    reprfileloc_key: ReprFileLocation(
                         path=self.parent.fspath,
                         lineno=mismatch.lineno,
                         message=mismatch.error_message,
-                    ),
-                    lines=mismatch.lines,
-                    style="short",
-                    reprlocals=None,
-                    reprfuncargs=None,
-                )
-                for mismatch in excinfo.value.errors
-            ]
-            return exception_repr
-        else:
-            return super().repr_failure(excinfo, style=style)  # pragma: no cover
+                    )
+                },
+            )
+            for mismatch in excinfo.value.errors
+        ]
+        return exception_repr
 
 
 class PytestMypyFile(pytest.File):
     def __init__(
         self, fspath: LocalPath, parent=None, config=None, session=None, nodeid=None,
     ) -> None:
+        if config is None:
+            config = getattr(parent, "config", None)
         super().__init__(fspath, parent, config, session, nodeid)
         self.add_marker("mypy")
         self.mypy_file = parse_file(self.fspath)
         self._mypy_result: Optional[MypyResult] = None
 
+    @classmethod
+    def from_parent(cls, parent, fspath):
+        if PYTEST_VERISON_INFO < (5, 4):
+            config = getattr(parent, "config", None)
+            return cls(parent=parent, config=config, fspath=fspath)
+        else:
+            return super().from_parent(parent=parent, fspath=fspath)
+
     def collect(self) -> Iterator[PytestMypyTestItem]:
         for item in self.mypy_file.items:
-            yield PytestMypyTestItem(
-                name="[mypy]" + item.name,
-                parent=self,
-                config=self.config,
-                mypy_item=item,
+            yield PytestMypyTestItem.from_parent(
+                parent=self, name="[mypy]" + item.name, mypy_item=item,
             )
 
     def run_mypy(self, item: MypyTestItem) -> Tuple[int, List[Message]]:
@@ -163,14 +190,17 @@ def pytest_collect_file(path: LocalPath, parent):
     if not hasattr(builtins, "reveal_type"):
         setattr(builtins, "reveal_type", lambda x: x)
 
-    config = getattr(parent, "config", None)
-
-    if path.ext in (".mypy-testing", ".py") and path.basename.startswith("test_"):
-        file = PytestMypyFile(path, parent=parent, config=config)
-        if file.mypy_file.items:
-            return file
-    else:
+    if path.ext not in (".mypy-testing", ".py"):
         return None  # pragma: no cover
+    if not path.basename.startswith("test_"):
+        return None  # pragma: no cover
+
+    file = PytestMypyFile.from_parent(parent=parent, fspath=path)
+
+    if file.mypy_file.items:
+        return file
+    else:
+        return None
 
 
 def pytest_configure(config):
