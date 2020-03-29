@@ -22,10 +22,13 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        python -m pip install -c requirements.txt tox
-    - name: Run tox
+        python -m pip install -c requirements.txt invoke tox
+    - name: Run tox for pytest 5.3.x
+      env:
+        TOX_PARALLEL_NO_SPINNER: "1"
       run: |
-        tox -e py-mypy0750,py-mypy0761
+        inv mkdir build/coverage-data
+        inv tox -e "py-*"
 
   lint:
     runs-on: ubuntu-latest
