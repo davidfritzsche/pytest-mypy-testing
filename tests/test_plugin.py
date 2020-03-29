@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: CC0-1.0
 
 from types import SimpleNamespace
+from unittest.mock import Mock
 
 import pytest
+from _pytest.config import Config
 from py._path.local import LocalPath
 
 from pytest_mypy_testing.message import Severity
@@ -30,7 +32,8 @@ def mk_dummy_parent(tmp_path, filename, content=""):
     path = tmp_path / filename
     path.write_text(content)
 
-    config = SimpleNamespace(rootdir=str(tmp_path))
+    config = Mock(spec=Config)
+    config.rootdir = str(tmp_path)
     session = SimpleNamespace(config=config, _initialpaths=[])
     parent = SimpleNamespace(
         config=config,
