@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 [build-system]
-requires = ["flit_core >=2,<3"]
+requires = ["dflit_core >=2,<3"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
@@ -58,3 +58,12 @@ exclude = '''
   | /dist/
 )
 '''
+
+[tool.coverage.run]
+include = [
+    'src/*',
+    'mypy_tests/*',
+    'tests/*',
+]
+data_file = 'build/coverage-data/coverage'
+parallel = true

@@ -2,17 +2,17 @@
 # SPDX-License-Identifier: CC0-1.0
 black==19.10b0
 bump2version
+coverage[toml]
+dflit
 flake8-black
 flake8-isort
-flit
-flit_core>=2,<3
 fsfe-reuse
 invoke
-mypy==0.761
+mypy==0.770
 pip-tools
 pip>=19.3
 pytest-cov
-pytest~=5.3
+pytest~=5.3.5
 setuptools>=43
 tox-pyenv
 tox>=3.14.3
