@@ -192,7 +192,8 @@ def pytest_collect_file(path: LocalPath, parent):
 
     if path.ext not in (".mypy-testing", ".py"):
         return None  # pragma: no cover
-    if not path.basename.startswith("test_"):
+    python_files = parent.config.getini("python_files")  # type: List[str]
+    if not (any(path.fnmatch(pattern) for pattern in python_files)):
         return None  # pragma: no cover
 
     file = PytestMypyFile.from_parent(parent=parent, fspath=path)
