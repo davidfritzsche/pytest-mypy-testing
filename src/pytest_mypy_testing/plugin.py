@@ -17,7 +17,7 @@ from .parser import MypyTestItem, parse_file
 
 
 PYTEST_VERSION = pytest.__version__
-PYTEST_VERISON_INFO = tuple(int(part) for part in PYTEST_VERSION.split("."))
+PYTEST_VERSION_INFO = tuple(int(part) for part in PYTEST_VERSION.split(".")[:3])
 
 
 class MypyResult(NamedTuple):
@@ -54,7 +54,7 @@ class PytestMypyTestItem(pytest.Item):
 
     @classmethod
     def from_parent(cls, parent, name, mypy_item):
-        if PYTEST_VERISON_INFO < (5, 4):
+        if PYTEST_VERSION_INFO < (5, 4):
             return cls(
                 parent=parent, name=name, config=parent.config, mypy_item=mypy_item
             )
@@ -78,7 +78,7 @@ class PytestMypyTestItem(pytest.Item):
         if not excinfo.errisinstance(MypyAssertionError):
             return super().repr_failure(excinfo, style=style)  # pragma: no cover
         reprfileloc_key = (
-            "filelocrepr" if PYTEST_VERISON_INFO < (5, 4) else "reprfileloc"
+            "filelocrepr" if PYTEST_VERSION_INFO < (5, 4) else "reprfileloc"
         )
         exception_repr = excinfo.getrepr(style="short")
         exception_repr.reprcrash.message = ""
@@ -114,7 +114,7 @@ class PytestMypyFile(pytest.File):
 
     @classmethod
     def from_parent(cls, parent, fspath):
-        if PYTEST_VERISON_INFO < (5, 4):
+        if PYTEST_VERSION_INFO < (5, 4):
             config = getattr(parent, "config", None)
             return cls(parent=parent, config=config, fspath=fspath)
         else:
