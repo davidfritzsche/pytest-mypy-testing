@@ -109,7 +109,7 @@ class PytestMypyFile(pytest.File):
             config = getattr(parent, "config", None)
         super().__init__(fspath, parent, config, session, nodeid)
         self.add_marker("mypy")
-        self.mypy_file = parse_file(self.fspath)
+        self.mypy_file = parse_file(self.fspath, config=config)
         self._mypy_result: Optional[MypyResult] = None
 
     @classmethod
@@ -186,23 +186,20 @@ class PytestMypyFile(pytest.File):
 
 
 def pytest_collect_file(path: LocalPath, parent):
-    import builtins
+    if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
+        file = PytestMypyFile.from_parent(parent=parent, fspath=path)
+        if file.mypy_file.items:
+            return file
+    return None
 
-    # Add a reveal_type function to the builtins module
-    if not hasattr(builtins, "reveal_type"):
-        setattr(builtins, "reveal_type", lambda x: x)
 
-    if path.ext not in (".mypy-testing", ".py"):
-        return None  # pragma: no cover
-    if not path.basename.startswith("test_"):
-        return None  # pragma: no cover
-
-    file = PytestMypyFile.from_parent(parent=parent, fspath=path)
-
-    if file.mypy_file.items:
-        return file
-    else:
-        return None
+def _is_pytest_test_file(path: LocalPath, parent):
+    """Return `True` if *path* is considered to be a pytest test file."""
+    # Based on _pytest/python.py::pytest_collect_file
+    fn_patterns = parent.config.getini("python_files") + ["__init__.py"]
+    return path.ext == ".py" and (
+        parent.session.isinitpath(path) or any(path.fnmatch(pat) for pat in fn_patterns)
+    )
 
 
 def pytest_configure(config):
@@ -210,9 +207,19 @@ def pytest_configure(config):
     Register a custom marker for MypyItems,
     and configure the plugin based on the CLI.
     """
+    _add_reveal_type_to_builtins()
+
     config.addinivalue_line(
         "markers", "mypy_testing: mark functions to be used for mypy testing."
     )
     config.addinivalue_line(
         "markers", "mypy: mark mypy tests. Do not add this marker manually!"
     )
+
+
+def _add_reveal_type_to_builtins():
+    # Add a reveal_type function to the builtins module
+    import builtins
+
+    if not hasattr(builtins, "reveal_type"):
+        setattr(builtins, "reveal_type", lambda x: x)

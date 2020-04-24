@@ -4,8 +4,10 @@
 import ast
 import sys
 from tokenize import COMMENT, ENDMARKER, NAME, NEWLINE, NL, TokenInfo
+from unittest.mock import Mock
 
 import pytest
+from _pytest.config import Config
 
 from pytest_mypy_testing.parser import (
     MypyTestItem,
@@ -87,4 +89,5 @@ def test_parse_file_basic_call_works_with_py37(monkeypatch, tmp_path):
     )
 
     monkeypatch.setattr(sys, "version_info", (3, 7, 5))
-    parse_file(str(path))
+    config = Mock(spec=Config)
+    parse_file(str(path), config)

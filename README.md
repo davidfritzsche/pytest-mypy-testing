@@ -34,20 +34,25 @@ option `-p no:mypy-testing`.
 # Writing Mypy Output Test Cases
 
 A mypy test case is a top-level functions decorated with
-`@pytest.mark.mypy_testing` in a file name `test_*.py` or
-`test_*.mypy-testing`.  Note that we use the Python
+`@pytest.mark.mypy_testing` in a file named `*.mypy-testing` or in a
+pytest test module.  `pytest-mypy-testing` follows the pytest logic in
+identifying test modules and respects the
+[`python_files`](https://docs.pytest.org/en/latest/reference.html#confval-python_files)
+config value.
+
+Note that ``pytest-mypy-testing`` uses the Python
 [ast](https://docs.python.org/3/library/ast.html) module to parse
-candidate files and do not import any file, i.e., the decorator must
+candidate files and does not import any file, i.e., the decorator must
 be exactly named `@pytest.mark.mypy_testing`.
 
-In a `test_*.py` file you may combine both regular pytest test
-functions and mypy test functions. A single function can even be both.
+In a pytest test module file you may combine both regular pytest test
+functions and mypy test functions. A single function can be both.
 
 Example: A simple mypy test case could look like this:
 
 ``` python
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment():
+def mypy_test_invalid_assginment() -> None:
     foo = "abc"
     foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str")
 ```
@@ -81,8 +86,33 @@ decorators are extracted from the ast.
 # Development
 
 * Create and activate a Python virtual environment.
-* Install development dependencies by calling `pip install -U -r requirements.txt`.
-* Start developing
+* Install development dependencies by calling `python -m pip install
+  -U -r requirements.txt`.
+* Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
   Python 3.6, 3.7 and 3.8 must be available. You might want to look
   into using [pyenv](https://github.com/pyenv/pyenv).
+
+
+# Changelog
+
+## v0.0.7
+
+* Fix `PYTEST_VERSION_INFO` - by [@blueyed](https://github.com/blueyed) (#8)
+* Always pass `--check-untyped-defs` to mypy (#11)
+* Respect pytest config `python_files` when identifying pytest test modules (#12)
+
+## v0.0.6 - add pytest 5.4 support
+
+* Update the plugin to work with pytest 5.4 (#7)
+
+## v0.0.5 - CI improvements
+
+* Make invoke tasks work (partially) on Windows (#6)
+* Add an invoke task to run tox environments by selecting globs (e.g.,
+  `inv tox -e py-*`) (#6)
+* Use coverage directly for code coverage to get more consistent
+  parallel run results (#6)
+* Use flit fork dflit to make packaging work with `LICENSES` directory
+  (#6)
+* Bump dependencies (#6)
