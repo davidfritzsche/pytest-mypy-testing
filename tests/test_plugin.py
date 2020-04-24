@@ -34,7 +34,10 @@ def mk_dummy_parent(tmp_path, filename, content=""):
 
     config = Mock(spec=Config)
     config.rootdir = str(tmp_path)
-    session = SimpleNamespace(config=config, _initialpaths=[])
+    config.getini.return_value = ["test_*.py", "*_test.py"]
+    session = SimpleNamespace(
+        config=config, isinitpath=lambda p: True, _initialpaths=[]
+    )
     parent = SimpleNamespace(
         config=config,
         session=session,

@@ -103,7 +103,7 @@ def generate_per_line_token_lists(source: str,) -> Iterator[List[tokenize.TokenI
         i += 1
 
 
-def parse_file(filename: str) -> MypyTestFile:
+def parse_file(filename: str, config) -> MypyTestFile:
     """Parse *filename* and return information about mypy test cases."""
     filename = os.path.abspath(filename)
     with open(filename, "r", encoding="utf-8") as f:
