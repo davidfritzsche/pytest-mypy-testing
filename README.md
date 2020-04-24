@@ -21,7 +21,7 @@ this allows us to check mypys type interference.
 # Installation
 
 ``` shell
-pip install pytest-mypy-testing
+python -m pip install pytest-mypy-testing
 ```
 
 The Python distribution package contains an [entry
