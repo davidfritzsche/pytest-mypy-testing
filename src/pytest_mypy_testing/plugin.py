@@ -144,14 +144,16 @@ class PytestMypyFile(pytest.File):
             os.makedirs(mypy_cache_dir)
 
             mypy_args = [
-                "--show-traceback",
-                "--show-column-numbers",
-                "--no-silence-site-packages",
+                "--cache-dir={}".format(mypy_cache_dir),
+                "--check-untyped-defs",
+                "--hide-error-context",
+                "--no-color-output",
                 "--no-error-summary",
                 "--no-pretty",
-                "--no-color-output",
-                "--hide-error-context",
-                "--cache-dir={}".format(mypy_cache_dir),
+                "--no-silence-site-packages",
+                "--no-warn-unused-configs",
+                "--show-column-numbers",
+                "--show-traceback",
                 str(filename),
             ]
 
