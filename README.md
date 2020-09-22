@@ -52,7 +52,7 @@ Example: A simple mypy test case could look like this:
 
 ``` python
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment() -> None:
+def mypy_test_invalid_assignment() -> None:
     foo = "abc"
     foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str")
 ```
