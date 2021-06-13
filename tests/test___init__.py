@@ -3,7 +3,7 @@
 
 import re
 
-from pytest_mypy_testing.__init__ import __version__
+from pytest_mypy_testing import __version__
 
 
 def test_version():

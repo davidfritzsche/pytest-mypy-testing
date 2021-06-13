@@ -89,7 +89,7 @@ def iter_mypy_comments(
             pass
 
 
-def generate_per_line_token_lists(source: str,) -> Iterator[List[tokenize.TokenInfo]]:
+def generate_per_line_token_lists(source: str) -> Iterator[List[tokenize.TokenInfo]]:
     i = 0
     for lineno, group in itertools.groupby(
         tokenize.generate_tokens(io.StringIO(source).readline),
@@ -131,7 +131,7 @@ def parse_file(filename: str, config) -> MypyTestFile:
             )
 
     return MypyTestFile(
-        filename=filename, source_lines=source_lines, items=items, messages=messages,
+        filename=filename, source_lines=source_lines, items=items, messages=messages
     )
 
 

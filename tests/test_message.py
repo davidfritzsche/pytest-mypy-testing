@@ -7,7 +7,7 @@ from pytest_mypy_testing.message import Message, Severity
 
 
 @pytest.mark.parametrize(
-    "string,expected", [("r", Severity.NOTE), ("N", Severity.NOTE),]
+    "string,expected", [("r", Severity.NOTE), ("N", Severity.NOTE)]
 )
 def test_init_severity(string: str, expected: Severity):
     assert Severity.from_string(string) == expected
@@ -23,7 +23,7 @@ def test_init_severity(string: str, expected: Severity):
     ],
 )
 def test_message_from_comment(
-    filename: str, comment: str, severity: Severity, message: str,
+    filename: str, comment: str, severity: Severity, message: str
 ):
     lineno = 123
     expected = Message(

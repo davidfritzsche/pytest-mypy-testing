@@ -43,9 +43,7 @@ class OutputMismatch:
         return Severity(max(msg.severity.value for msg in self.expected))
 
     def __post_init__(self) -> None:
-        def _fmt(
-            msg: Message, actual_expected: str = "", *, indent: str = "  ",
-        ) -> str:
+        def _fmt(msg: Message, actual_expected: str = "", *, indent: str = "  ") -> str:
             if actual_expected:
                 actual_expected += ": "
             return (
@@ -137,5 +135,9 @@ def iter_msg_seq_diff_chunks(
     """Iterate over sequences of not matching messages"""
     seq_matcher = difflib.SequenceMatcher(isjunk=None, a=a, b=b, autojunk=False)
     for tag, i1, i2, j1, j2 in seq_matcher.get_opcodes():
-        if tag != "equal":
-            yield a[i1:i2], b[j1:j2]
+        if tag == "equal":
+            continue
+        actual = a[i1:i2]
+        expected = b[j1:j2]
+        if actual or expected:
+            yield actual, expected

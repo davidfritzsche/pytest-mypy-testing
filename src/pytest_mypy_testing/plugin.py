@@ -11,7 +11,7 @@ from _pytest._code.code import ReprEntry, ReprFileLocation
 from _pytest.config import Config
 from py._path.local import LocalPath
 
-from .message import Message
+from .message import Message, Severity
 from .output_processing import OutputMismatch, diff_message_sequences
 from .parser import MypyTestItem, parse_file
 
@@ -103,7 +103,7 @@ class PytestMypyTestItem(pytest.Item):
 
 class PytestMypyFile(pytest.File):
     def __init__(
-        self, fspath: LocalPath, parent=None, config=None, session=None, nodeid=None,
+        self, fspath: LocalPath, parent=None, config=None, session=None, nodeid=None
     ) -> None:
         if config is None:
             config = getattr(parent, "config", None)
@@ -123,7 +123,7 @@ class PytestMypyFile(pytest.File):
     def collect(self) -> Iterator[PytestMypyTestItem]:
         for item in self.mypy_file.items:
             yield PytestMypyTestItem.from_parent(
-                parent=self, name="[mypy]" + item.name, mypy_item=item,
+                parent=self, name="[mypy]" + item.name, mypy_item=item
             )
 
     def run_mypy(self, item: MypyTestItem) -> Tuple[int, List[Message]]:
@@ -160,10 +160,19 @@ class PytestMypyFile(pytest.File):
             out, err, returncode = mypy.api.run(mypy_args)
 
         lines = (out + err).splitlines()
+
+        # for line in lines:
+        #     print("%%%%", line)
+
         file_messages = [
             msg
             for msg in map(Message.from_output, lines)
-            if msg.filename == self.mypy_file.filename
+            if (msg.filename == self.mypy_file.filename)
+            and not (
+                msg.severity is Severity.NOTE
+                and msg.message
+                == "See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports"
+            )
         ]
 
         non_item_messages = []

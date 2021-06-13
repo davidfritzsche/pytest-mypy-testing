@@ -68,7 +68,7 @@ def test_pytest_collect_file(tmp_path, filename):
 
     parent = mk_dummy_parent(tmp_path, filename, content)
     expected = MypyTestFile(
-        filename=str(parent._path), source_lines=content.splitlines(),
+        filename=str(parent._path), source_lines=content.splitlines()
     )
 
     actual = pytest_collect_file(parent.fspath, parent)

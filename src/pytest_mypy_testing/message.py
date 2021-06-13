@@ -88,8 +88,12 @@ class Message:
     def is_comment(self) -> bool:
         return (self.severity, self.message) in _COMMENT_MESSAGES
 
-    def _as_short_tuple(self) -> "Message.TupleType":
-        return (self.filename, self.lineno, None, self.severity, self.message)
+    def _as_short_tuple(self, *, normalized: bool = False) -> "Message.TupleType":
+        if normalized:
+            message = self.message.replace("'", '"')
+        else:
+            message = self.message
+        return (self.filename, self.lineno, None, self.severity, message)
 
     def __post_init__(self):
         parts = [self.filename, str(self.lineno)]
@@ -100,7 +104,9 @@ class Message:
     def __eq__(self, other):
         if isinstance(other, Message):
             if self.colno is None or other.colno is None:
-                return self._as_short_tuple() == other._as_short_tuple()
+                return self._as_short_tuple(normalized=True) == other._as_short_tuple(
+                    normalized=True
+                )
             else:
                 return self.astuple() == other.astuple()
         else:
