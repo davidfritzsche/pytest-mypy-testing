@@ -47,7 +47,7 @@ def test_create_mypy_test_case():
 
 
 def test_iter_comments():
-    source = "\n".join(["# foo", "assert True # E: bar",])
+    source = "\n".join(["# foo", "assert True # E: bar"])
 
     actual = list(generate_per_line_token_lists(source))
 
