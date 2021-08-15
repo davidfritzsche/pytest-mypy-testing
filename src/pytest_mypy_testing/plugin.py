@@ -150,6 +150,7 @@ class PytestMypyFile(pytest.File):
                 "--no-color-output",
                 "--no-error-summary",
                 "--no-pretty",
+                "--soft-error-limit=-1",
                 "--no-silence-site-packages",
                 "--no-warn-unused-configs",
                 "--show-column-numbers",
