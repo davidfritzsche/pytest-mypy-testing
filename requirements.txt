@@ -4,15 +4,13 @@
 #
 #    pip-compile --allow-unsafe --no-emit-index-url
 #
-appdirs==1.4.4
-    # via
-    #   black
-    #   virtualenv
 attrs==21.2.0
     # via pytest
+backports.entry-points-selectable==1.1.1
+    # via virtualenv
 binaryornot==0.4.4
     # via reuse
-black==21.6b0
+black==21.12b0
     # via
     #   -r requirements.in
     #   flake8-black
@@ -22,18 +20,19 @@ boolean.py==3.8
     #   reuse
 bump2version==1.0.1
     # via -r requirements.in
-certifi==2021.5.30
+certifi==2021.10.8
     # via requests
 chardet==4.0.0
     # via
     #   binaryornot
     #   python-debian
-    #   requests
-click==8.0.1
+charset-normalizer==2.0.9
+    # via requests
+click==8.0.3
     # via
     #   black
     #   pip-tools
-coverage[toml]==5.5
+coverage[toml]==6.2
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -41,35 +40,35 @@ dflit-core==2.3.0.1
     # via dflit
 dflit==2.3.0.1
     # via -r requirements.in
-distlib==0.3.2
+distlib==0.3.4
     # via virtualenv
-docutils==0.17.1
+docutils==0.18.1
     # via dflit
-filelock==3.0.12
+filelock==3.4.0
     # via
     #   tox
     #   virtualenv
-flake8-black==0.2.1
+flake8-black==0.2.3
     # via -r requirements.in
-flake8-isort==4.0.0
+flake8-isort==4.1.1
     # via -r requirements.in
-flake8==3.9.2
+flake8==4.0.1
     # via
     #   flake8-black
     #   flake8-isort
 fsfe-reuse==1.0.0
     # via -r requirements.in
-idna==2.10
+idna==3.3
     # via requests
 iniconfig==1.1.1
     # via pytest
-invoke==1.5.0
+invoke==1.6.0
     # via -r requirements.in
-isort==5.8.0
+isort==5.10.1
     # via flake8-isort
-jinja2==3.0.1
+jinja2==3.0.3
     # via reuse
-license-expression==1.2
+license-expression==21.6.14
     # via reuse
 markupsafe==2.0.1
     # via jinja2
@@ -79,53 +78,55 @@ mypy-extensions==0.4.3
     # via
     #   black
     #   mypy
-mypy==0.902
+mypy==0.930
     # via -r requirements.in
-packaging==20.9
+packaging==21.3
     # via
     #   pytest
     #   tox
-pathspec==0.8.1
+pathspec==0.9.0
     # via black
-pep517==0.10.0
+pep517==0.12.0
     # via pip-tools
-pip-tools==6.1.0
+pip-tools==6.4.0
     # via -r requirements.in
-pluggy==0.13.1
+platformdirs==2.4.0
+    # via
+    #   black
+    #   virtualenv
+pluggy==1.0.0
     # via
     #   pytest
     #   tox
-py==1.10.0
+py==1.11.0
     # via
     #   pytest
     #   tox
-pycodestyle==2.7.0
+pycodestyle==2.8.0
     # via flake8
-pyflakes==2.3.1
+pyflakes==2.4.0
     # via flake8
-pyparsing==2.4.7
+pyparsing==3.0.6
     # via packaging
-pytest-cov==2.12.1
+pytest-cov==3.0.0
     # via -r requirements.in
 pytest-html==3.1.1
     # via -r requirements.in
 pytest-metadata==1.11.0
     # via pytest-html
-pytest==6.2.4
+pytest==6.2.5
     # via
     #   -r requirements.in
     #   pytest-cov
     #   pytest-html
     #   pytest-metadata
-python-debian==0.1.39
+python-debian==0.1.42
     # via reuse
 pytoml==0.1.21
     # via
     #   dflit
     #   dflit-core
-regex==2021.4.4
-    # via black
-requests==2.25.1
+requests==2.26.0
     # via
     #   dflit
     #   reuse
@@ -133,37 +134,44 @@ reuse==0.13.0
     # via fsfe-reuse
 six==1.16.0
     # via
-    #   python-debian
     #   tox
     #   virtualenv
-testfixtures==6.17.1
+testfixtures==6.18.3
     # via flake8-isort
 toml==0.10.2
+    # via
+    #   flake8-black
+    #   pytest
+    #   tox
+tomli==1.2.3
     # via
     #   black
     #   coverage
     #   mypy
     #   pep517
-    #   pytest
-    #   pytest-cov
-    #   tox
 tox-pyenv==1.1.0
     # via -r requirements.in
-tox==3.23.1
+tox==3.24.4
     # via
     #   -r requirements.in
     #   tox-pyenv
-typing-extensions==3.10.0.0
-    # via mypy
-urllib3==1.26.5
+typing-extensions==4.0.1
+    # via
+    #   black
+    #   mypy
+urllib3==1.26.7
     # via requests
-virtualenv==20.4.7
+virtualenv==20.10.0
     # via tox
+wheel==0.37.1
+    # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==21.1.2
+pip==21.3.1
     # via
     #   -r requirements.in
     #   pip-tools
-setuptools==57.0.0
-    # via -r requirements.in
+setuptools==60.1.0
+    # via
+    #   -r requirements.in
+    #   pip-tools
