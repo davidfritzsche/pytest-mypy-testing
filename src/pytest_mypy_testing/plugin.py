@@ -43,10 +43,11 @@ class PytestMypyTestItem(pytest.Item):
         *,
         mypy_item: MypyTestItem,
         config: Optional[Config] = None,
+        **kwargs,
     ) -> None:
         if config is None:
             config = parent.config
-        super().__init__(name, parent=parent, config=config)
+        super().__init__(name, parent=parent, config=config, **kwargs)
         self.add_marker("mypy")
         self.mypy_item = mypy_item
         for mark in self.mypy_item.marks:
@@ -103,22 +104,37 @@ class PytestMypyTestItem(pytest.Item):
 
 class PytestMypyFile(pytest.File):
     def __init__(
-        self, fspath: LocalPath, parent=None, config=None, session=None, nodeid=None
+        self,
+        *,
+        parent=None,
+        config=None,
+        session=None,
+        nodeid=None,
+        **kwargs,
     ) -> None:
         if config is None:
             config = getattr(parent, "config", None)
-        super().__init__(fspath, parent, config, session, nodeid)
+        super().__init__(
+            parent=parent,
+            config=config,
+            session=session,
+            nodeid=nodeid,
+            **kwargs,
+        )
         self.add_marker("mypy")
-        self.mypy_file = parse_file(self.fspath, config=config)
+        if PYTEST_VERSION_INFO >= (7,):
+            self.mypy_file = parse_file(self.path, config=config)
+        else:
+            self.mypy_file = parse_file(self.fspath, config=config)
         self._mypy_result: Optional[MypyResult] = None
 
     @classmethod
-    def from_parent(cls, parent, fspath):
+    def from_parent(cls, parent, **kwargs):
         if PYTEST_VERSION_INFO < (5, 4):
             config = getattr(parent, "config", None)
-            return cls(parent=parent, config=config, fspath=fspath)
+            return cls(parent=parent, config=config, **kwargs)
         else:
-            return super().from_parent(parent=parent, fspath=fspath)
+            return super().from_parent(parent=parent, **kwargs)
 
     def collect(self) -> Iterator[PytestMypyTestItem]:
         for item in self.mypy_file.items:
@@ -195,12 +211,23 @@ class PytestMypyFile(pytest.File):
         )
 
 
-def pytest_collect_file(path: LocalPath, parent):
-    if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
-        file = PytestMypyFile.from_parent(parent=parent, fspath=path)
-        if file.mypy_file.items:
-            return file
-    return None
+if PYTEST_VERSION_INFO < (7,):
+
+    def pytest_collect_file(path: LocalPath, parent):
+        if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
+            file = PytestMypyFile.from_parent(parent=parent, fspath=path)
+            if file.mypy_file.items:
+                return file
+        return None
+
+else:
+
+    def pytest_collect_file(file_path, path: LocalPath, parent):  # type: ignore
+        if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
+            file = PytestMypyFile.from_parent(parent=parent, path=file_path)
+            if file.mypy_file.items:
+                return file
+        return None
 
 
 def _is_pytest_test_file(path: LocalPath, parent):
