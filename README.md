@@ -96,6 +96,11 @@ decorators are extracted from the ast.
 
 # Changelog
 
+## v0.0.10
+
+* Add support for pytest 7.0.x and require Python >= 3.7 (#23)
+* Bump dependencies (#24)
+
 ## v0.0.9
 
 * Disable soft error limit (#21)
