@@ -18,9 +18,10 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: OS Independent",
     "Operating System :: POSIX",
-    "Programming Language :: Python :: 3.6",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
     "Typing :: Typed",
 ]
 description-file = "README.md"
@@ -28,10 +29,10 @@ dist-name = "pytest-mypy-testing"
 home-page = "https://github.com/davidfritzsche/pytest-mypy-testing"
 license = "Apache-2.0 OR MIT"
 requires = [
-    "pytest",
+    "pytest<8",
     "mypy",
 ]
-requires-python = ">=3.6"
+requires-python = ">=3.7"
 
 [tool.flit.entrypoints.pytest11]
 mypy-testing = "pytest_mypy_testing.plugin"

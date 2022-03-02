@@ -90,11 +90,19 @@ decorators are extracted from the ast.
   -U -r requirements.txt`.
 * Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
-  Python 3.6, 3.7 and 3.8 must be available. You might want to look
+  Python 3.7, 3.8, 3.9 and 3.10 must be available. You might want to look
   into using [pyenv](https://github.com/pyenv/pyenv).
 
 
 # Changelog
+
+## v0.0.9
+
+* Disable soft error limit (#21)
+
+## v0.0.8
+
+* Normalize messages to enable support for mypy 0.902 and pytest 6.2.4 (#20)
 
 ## v0.0.7
 

@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
 
+import pathlib
 from types import SimpleNamespace
 from unittest.mock import Mock
 
@@ -18,9 +19,20 @@ from pytest_mypy_testing.plugin import (
 from pytest_mypy_testing.strutil import dedent
 
 
+PYTEST_VERSION = pytest.__version__
+PYTEST_VERSION_INFO = tuple(int(part) for part in PYTEST_VERSION.split(".")[:3])
+
+
 ERROR = Severity.ERROR
 NOTE = Severity.NOTE
 WARNING = Severity.WARNING
+
+
+def call_pytest_collect_file(fspath, parent):
+    if PYTEST_VERSION_INFO < (7,):
+        return pytest_collect_file(fspath, parent)
+    else:
+        return pytest_collect_file(pathlib.Path(str(fspath)), fspath, parent)  # type: ignore
 
 
 def test_create_mypy_assertion_error():
@@ -34,6 +46,7 @@ def mk_dummy_parent(tmp_path, filename, content=""):
 
     config = Mock(spec=Config)
     config.rootdir = str(tmp_path)
+    config.rootpath = str(tmp_path)
     config.getini.return_value = ["test_*.py", "*_test.py"]
     session = SimpleNamespace(
         config=config, isinitpath=lambda p: True, _initialpaths=[]
@@ -43,7 +56,7 @@ def mk_dummy_parent(tmp_path, filename, content=""):
         session=session,
         nodeid="dummy",
         fspath=LocalPath(path),
-        _path=path,
+        path=path,
     )
 
     return parent
@@ -52,8 +65,9 @@ def mk_dummy_parent(tmp_path, filename, content=""):
 @pytest.mark.parametrize("filename", ["z.py", "test_z.mypy-testing"])
 def test_pytest_collect_file_not_test_file_name(tmp_path, filename: str):
     parent = mk_dummy_parent(tmp_path, filename)
-
-    assert pytest_collect_file(parent.fspath, parent) is None
+    fspath = parent.fspath
+    actual = call_pytest_collect_file(fspath, parent)
+    assert actual is None
 
 
 @pytest.mark.parametrize("filename", ["test_z.py", "test_z.mypy-testing"])
@@ -68,10 +82,11 @@ def test_pytest_collect_file(tmp_path, filename):
 
     parent = mk_dummy_parent(tmp_path, filename, content)
     expected = MypyTestFile(
-        filename=str(parent._path), source_lines=content.splitlines()
+        filename=str(parent.path), source_lines=content.splitlines()
     )
 
-    actual = pytest_collect_file(parent.fspath, parent)
+    fspath = parent.fspath
+    actual = call_pytest_collect_file(fspath, parent)
     assert isinstance(actual, PytestMypyFile)
 
     assert len(actual.mypy_file.items) == 1
