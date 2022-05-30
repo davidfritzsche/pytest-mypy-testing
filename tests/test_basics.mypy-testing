@@ -18,6 +18,30 @@ def mypy_test_use_reveal_type():
 
 
 @pytest.mark.mypy_testing
+def mypy_test_use_reveal_type__float_var():
+    some_float = 123.03
+    reveal_type(some_float)  # R: builtins.float
+
+
+@pytest.mark.mypy_testing
+def mypy_test_use_reveal_type__int_var():
+    some_int = 123
+    reveal_type(some_int)  # R: builtins.int
+
+
+@pytest.mark.mypy_testing
+def mypy_test_use_reveal_type__int_list_var():
+    some_list = [123]
+    reveal_type(some_list)  # R: builtins.list[builtins.int]
+
+
+@pytest.mark.mypy_testing
+def mypy_test_use_reveal_type__int_list_var__with__inferred_asterisk():
+    some_list = [123]
+    reveal_type(some_list)  # R: builtins.list[builtins.int*]
+
+
+@pytest.mark.mypy_testing
 @pytest.mark.skip("foo")
 def mypy_test_use_skip_marker():
     reveal_type(123)  # N: Revealed type is 'Literal[123]?'
