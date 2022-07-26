@@ -2,14 +2,14 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
 import os
+import pathlib
 import tempfile
-from typing import Iterable, Iterator, List, NamedTuple, Optional, Tuple
+from typing import Iterable, Iterator, List, NamedTuple, Optional, Tuple, Union
 
 import mypy.api
 import pytest
 from _pytest._code.code import ReprEntry, ReprFileLocation
 from _pytest.config import Config
-from py._path.local import LocalPath
 
 from .message import Message, Severity
 from .output_processing import OutputMismatch, diff_message_sequences
@@ -36,6 +36,8 @@ class MypyAssertionError(AssertionError):
 
 
 class PytestMypyTestItem(pytest.Item):
+    parent: "PytestMypyFile"
+
     def __init__(
         self,
         name: str,
@@ -72,7 +74,7 @@ class PytestMypyTestItem(pytest.Item):
         if errors:
             raise MypyAssertionError(item=self, errors=errors)
 
-    def reportinfo(self) -> Tuple[str, Optional[int], str]:
+    def reportinfo(self) -> Tuple[Union["os.PathLike[str]", str], Optional[int], str]:
         return self.parent.fspath, self.mypy_item.lineno, self.name
 
     def repr_failure(self, excinfo, style=None):
@@ -153,7 +155,8 @@ class PytestMypyFile(pytest.File):
             ),
         )
 
-    def _run_mypy(self, filename: str) -> MypyResult:
+    def _run_mypy(self, filename: Union[pathlib.Path, os.PathLike, str]) -> MypyResult:
+        filename = pathlib.Path(filename)
         with tempfile.TemporaryDirectory(prefix="pytest-mypy-testing-") as tmp_dir_name:
 
             mypy_cache_dir = os.path.join(tmp_dir_name, "mypy_cache")
@@ -177,9 +180,6 @@ class PytestMypyFile(pytest.File):
             out, err, returncode = mypy.api.run(mypy_args)
 
         lines = (out + err).splitlines()
-
-        # for line in lines:
-        #     print("%%%%", line)
 
         file_messages = [
             msg
@@ -213,7 +213,7 @@ class PytestMypyFile(pytest.File):
 
 if PYTEST_VERSION_INFO < (7,):
 
-    def pytest_collect_file(path: LocalPath, parent):
+    def pytest_collect_file(path, parent):
         if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
             file = PytestMypyFile.from_parent(parent=parent, fspath=path)
             if file.mypy_file.items:
@@ -222,7 +222,7 @@ if PYTEST_VERSION_INFO < (7,):
 
 else:
 
-    def pytest_collect_file(file_path, path: LocalPath, parent):  # type: ignore
+    def pytest_collect_file(file_path, path, parent):  # type: ignore
         if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
             file = PytestMypyFile.from_parent(parent=parent, path=file_path)
             if file.mypy_file.items:
@@ -230,7 +230,7 @@ else:
         return None
 
 
-def _is_pytest_test_file(path: LocalPath, parent):
+def _is_pytest_test_file(path, parent):
     """Return `True` if *path* is considered to be a pytest test file."""
     # Based on _pytest/python.py::pytest_collect_file
     fn_patterns = parent.config.getini("python_files") + ["__init__.py"]
@@ -259,4 +259,4 @@ def _add_reveal_type_to_builtins():
     import builtins
 
     if not hasattr(builtins, "reveal_type"):
-        setattr(builtins, "reveal_type", lambda x: x)
+        setattr(builtins, "reveal_type", lambda x: x)  # noqa: B010

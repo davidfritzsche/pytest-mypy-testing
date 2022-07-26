@@ -5,8 +5,9 @@
 import dataclasses
 import enum
 import os
+import pathlib
 import re
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 
 __all__ = [
@@ -166,7 +167,9 @@ class Message:
         return f"{self._prefix} {self.severity.name.lower()}: {self.message}"
 
     @classmethod
-    def from_comment(cls, filename: str, lineno: int, comment: str) -> "Message":
+    def from_comment(
+        cls, filename: Union[pathlib.Path, str], lineno: int, comment: str
+    ) -> "Message":
         """Create message object from Python *comment*.
 
         >>> Message.from_comment("foo.py", 1, "R: foo")
@@ -183,7 +186,7 @@ class Message:
         else:
             revealed_type = None
         return Message(
-            filename,
+            str(filename),
             lineno=lineno,
             colno=colno,
             severity=Severity.from_string(m.group("severity")),
