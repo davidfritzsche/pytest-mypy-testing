@@ -7,9 +7,10 @@ import dataclasses
 import io
 import itertools
 import os
+import pathlib
 import sys
 import tokenize
-from typing import Iterable, Iterator, List, Optional, Set, Tuple
+from typing import Iterable, Iterator, List, Optional, Set, Tuple, Union
 
 from .message import Message
 
@@ -71,7 +72,7 @@ class MypyTestFile:
 
 
 def iter_comments(
-    filename: str, token_lists: List[List[tokenize.TokenInfo]]
+    filename: Union[pathlib.Path, str], token_lists: List[List[tokenize.TokenInfo]]
 ) -> Iterator[tokenize.TokenInfo]:
     for toks in token_lists:
         for tok in toks:
@@ -80,7 +81,7 @@ def iter_comments(
 
 
 def iter_mypy_comments(
-    filename: str, tokens: List[List[tokenize.TokenInfo]]
+    filename: Union[pathlib.Path, str], tokens: List[List[tokenize.TokenInfo]]
 ) -> Iterator[Message]:
     for tok in iter_comments(filename, tokens):
         try:
@@ -103,9 +104,9 @@ def generate_per_line_token_lists(source: str) -> Iterator[List[tokenize.TokenIn
         i += 1
 
 
-def parse_file(filename: str, config) -> MypyTestFile:
+def parse_file(filename: Union[os.PathLike, str, pathlib.Path], config) -> MypyTestFile:
     """Parse *filename* and return information about mypy test cases."""
-    filename = os.path.abspath(filename)
+    filename = pathlib.Path(filename).resolve()
     with open(filename, "r", encoding="utf-8") as f:
         source_text = f.read()
 
@@ -113,7 +114,7 @@ def parse_file(filename: str, config) -> MypyTestFile:
     token_lists = list(generate_per_line_token_lists(source_text))
     messages = list(iter_mypy_comments(filename, token_lists))
 
-    tree = ast.parse(source_text, filename=filename)
+    tree = ast.parse(source_text, filename=str(filename))
     if sys.version_info < (3, 8):
         _add_end_lineno_if_missing(tree, len(source_lines))
 
@@ -131,7 +132,10 @@ def parse_file(filename: str, config) -> MypyTestFile:
             )
 
     return MypyTestFile(
-        filename=filename, source_lines=source_lines, items=items, messages=messages
+        filename=str(filename),
+        source_lines=source_lines,
+        items=items,
+        messages=messages,
     )
 
 
@@ -140,18 +144,18 @@ def _add_end_lineno_if_missing(tree, line_count: int):
     prev_node: Optional[ast.AST] = None
     for node in ast.iter_child_nodes(tree):
         if prev_node is not None:
-            setattr(prev_node, "end_lineno", node.lineno)
+            setattr(prev_node, "end_lineno", node.lineno)  # noqa: B010
         prev_node = node
     if prev_node:
-        setattr(prev_node, "end_lineno", line_count)
+        setattr(prev_node, "end_lineno", line_count)  # noqa: B010
 
 
 def _find_marks(func_node: ast.FunctionDef) -> Set[str]:
-    return set(
+    return {
         name.split(".", 2)[2]
         for name, _ in _iter_func_decorators(func_node)
         if name.startswith("pytest.mark.")
-    )
+    }
 
 
 def _iter_func_decorators(func_node: ast.FunctionDef) -> Iterator[Tuple[str, ast.AST]]:

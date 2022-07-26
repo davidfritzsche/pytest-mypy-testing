@@ -95,7 +95,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install -c constraints.txt flake8 flake8-isort black mypy
+        python -m pip install -c constraints.txt black flake8 flake8-isort mypy pytest
         pip list
     - name: Run black
       run: |
