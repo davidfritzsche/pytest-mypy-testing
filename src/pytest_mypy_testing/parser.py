@@ -24,21 +24,21 @@ class MypyTestItem:
     lineno: int
     end_lineno: int
     expected_messages: List[Message]
-    func_node: Optional[ast.FunctionDef] = None
+    func_node: Optional[Union[ast.FunctionDef, ast.AsyncFunctionDef]] = None
     marks: Set[str] = dataclasses.field(default_factory=lambda: set())
     actual_messages: List[Message] = dataclasses.field(default_factory=lambda: [])
 
     @classmethod
     def from_ast_node(
         cls,
-        func_node: ast.FunctionDef,
+        func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
         marks: Optional[Set[str]] = None,
         unfiltered_messages: Optional[Iterable[Message]] = None,
     ) -> "MypyTestItem":
-        if not isinstance(func_node, ast.FunctionDef):
+        if not isinstance(func_node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             raise ValueError(
                 f"Invalid func_node type: Got {type(func_node)}, "
-                f"expected {ast.FunctionDef}"
+                f"expected {ast.FunctionDef} or {ast.AsyncFunctionDef}"
             )
         lineno = func_node.lineno
         end_lineno = getattr(func_node, "end_lineno", 0)
@@ -121,7 +121,7 @@ def parse_file(filename: Union[os.PathLike, str, pathlib.Path], config) -> MypyT
     items: List[MypyTestItem] = []
 
     for node in ast.iter_child_nodes(tree):
-        if not isinstance(node, ast.FunctionDef):
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             continue
         marks = _find_marks(node)
         if "mypy_testing" in marks:
