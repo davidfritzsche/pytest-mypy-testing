@@ -91,3 +91,22 @@ def test_parse_file_basic_call_works_with_py37(monkeypatch, tmp_path):
     monkeypatch.setattr(sys, "version_info", (3, 7, 5))
     config = Mock(spec=Config)
     parse_file(str(path), config)
+
+
+def test_parse_async(tmp_path):
+    path = tmp_path / "test_async.mypy-testing"
+    path.write_text(dedent(
+        r"""
+        import pytest
+
+        @pytest.mark.mypy_testing
+        async def mypy_test_invalid_assginment():
+            foo = "abc"
+            foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str")
+        """
+    ))
+    config = Mock(spec=Config)
+    result = parse_file(str(path), config)
+    assert len(result.items) == 1
+    item = result.items[0]
+    assert item.name == "mypy_test_invalid_assginment"
