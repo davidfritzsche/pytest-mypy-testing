@@ -150,7 +150,7 @@ def _add_end_lineno_if_missing(tree, line_count: int):
         setattr(prev_node, "end_lineno", line_count)  # noqa: B010
 
 
-def _find_marks(func_node: ast.FunctionDef) -> Set[str]:
+def _find_marks(func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> Set[str]:
     return {
         name.split(".", 2)[2]
         for name, _ in _iter_func_decorators(func_node)
@@ -158,7 +158,9 @@ def _find_marks(func_node: ast.FunctionDef) -> Set[str]:
     }
 
 
-def _iter_func_decorators(func_node: ast.FunctionDef) -> Iterator[Tuple[str, ast.AST]]:
+def _iter_func_decorators(
+    func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef]
+) -> Iterator[Tuple[str, ast.AST]]:
     def dotted(*nodes):
         return ".".join(_get_node_name(node) for node in reversed(nodes))
 
