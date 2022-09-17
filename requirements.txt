@@ -4,33 +4,35 @@
 #
 #    pip-compile --allow-unsafe --no-emit-index-url
 #
-attrs==21.4.0
+attrs==22.1.0
     # via
     #   flake8-bugbear
     #   pytest
 binaryornot==0.4.4
     # via reuse
-black==22.3.0
+black==22.8.0
     # via -r requirements.in
 boolean-py==4.0
     # via
     #   license-expression
     #   reuse
+build==0.8.0
+    # via pip-tools
 bump2version==1.0.1
     # via -r requirements.in
-certifi==2022.5.18.1
+certifi==2022.9.14
     # via requests
-chardet==4.0.0
+chardet==5.0.0
     # via
     #   binaryornot
     #   python-debian
-charset-normalizer==2.0.12
+charset-normalizer==2.1.1
     # via requests
 click==8.1.3
     # via
     #   black
     #   pip-tools
-coverage[toml]==6.4
+coverage[toml]==6.4.4
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -38,36 +40,36 @@ dflit==2.3.0.1
     # via -r requirements.in
 dflit-core==2.3.0.1
     # via dflit
-distlib==0.3.4
+distlib==0.3.6
     # via virtualenv
-docutils==0.18.1
+docutils==0.19
     # via dflit
-filelock==3.7.0
+filelock==3.8.0
     # via
     #   tox
     #   virtualenv
-flake8==4.0.1
+flake8==5.0.4
     # via
     #   flake8-bugbear
     #   flake8-comprehensions
     #   flake8-html
     #   flake8-mutable
     #   flake8-pyi
-flake8-bugbear==22.7.1
+flake8-bugbear==22.9.11
     # via -r requirements.in
 flake8-comprehensions==3.10.0
     # via -r requirements.in
 flake8-html==0.4.2
     # via -r requirements.in
-flake8-logging-format==0.6.0
+flake8-logging-format==0.7.5
     # via -r requirements.in
 flake8-mutable==1.2.0
     # via -r requirements.in
-flake8-pyi==22.7.0
+flake8-pyi==22.8.2
     # via -r requirements.in
 fsfe-reuse==1.0.0
     # via -r requirements.in
-idna==3.3
+idna==3.4
     # via requests
 iniconfig==1.1.1
     # via pytest
@@ -83,7 +85,7 @@ license-expression==30.0.0
     # via reuse
 markupsafe==2.1.1
     # via jinja2
-mccabe==0.6.1
+mccabe==0.7.0
     # via flake8
 mypy==0.971
     # via -r requirements.in
@@ -93,13 +95,14 @@ mypy-extensions==0.4.3
     #   mypy
 packaging==21.3
     # via
+    #   build
     #   pytest
     #   tox
-pathspec==0.9.0
+pathspec==0.10.1
     # via black
-pep517==0.12.0
-    # via pip-tools
-pip-tools==6.6.2
+pep517==0.13.0
+    # via build
+pip-tools==6.8.0
     # via -r requirements.in
 platformdirs==2.5.2
     # via
@@ -113,17 +116,17 @@ py==1.11.0
     # via
     #   pytest
     #   tox
-pycodestyle==2.8.0
+pycodestyle==2.9.1
     # via flake8
-pyflakes==2.4.0
+pyflakes==2.5.0
     # via
     #   flake8
     #   flake8-pyi
-pygments==2.12.0
+pygments==2.13.0
     # via flake8-html
 pyparsing==3.0.9
     # via packaging
-pytest==7.1.2
+pytest==7.1.3
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -133,54 +136,52 @@ pytest-cov==3.0.0
     # via -r requirements.in
 pytest-html==3.1.1
     # via -r requirements.in
-pytest-metadata==2.0.1
+pytest-metadata==2.0.2
     # via pytest-html
-python-debian==0.1.43
+python-debian==0.1.47
     # via reuse
 pytoml==0.1.21
     # via
     #   dflit
     #   dflit-core
-requests==2.27.1
+requests==2.28.1
     # via
     #   dflit
     #   reuse
 reuse==1.0.0
     # via fsfe-reuse
 six==1.16.0
-    # via
-    #   tox
-    #   virtualenv
-toml==0.10.2
     # via tox
 tomli==2.0.1
     # via
     #   black
+    #   build
     #   coverage
     #   mypy
     #   pep517
     #   pytest
-tox==3.25.0
+    #   tox
+tox==3.26.0
     # via
     #   -r requirements.in
     #   tox-pyenv
 tox-pyenv==1.1.0
     # via -r requirements.in
-typing-extensions==4.2.0
+typing-extensions==4.3.0
     # via mypy
-urllib3==1.26.9
+urllib3==1.26.12
     # via requests
-virtualenv==20.14.1
+virtualenv==20.16.5
     # via tox
 wheel==0.37.1
     # via pip-tools
 
 # The following packages are considered to be unsafe in a requirements file:
-pip==22.1.1
+pip==22.2.2
     # via
     #   -r requirements.in
     #   pip-tools
-setuptools==62.3.2
+setuptools==65.3.0
     # via
     #   -r requirements.in
     #   pip-tools
