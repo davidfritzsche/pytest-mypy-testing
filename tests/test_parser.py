@@ -95,8 +95,9 @@ def test_parse_file_basic_call_works_with_py37(monkeypatch, tmp_path):
 
 def test_parse_async(tmp_path):
     path = tmp_path / "test_async.mypy-testing"
-    path.write_text(dedent(
-        r"""
+    path.write_text(
+        dedent(
+            r"""
         import pytest
 
         @pytest.mark.mypy_testing
@@ -104,7 +105,8 @@ def test_parse_async(tmp_path):
             foo = "abc"
             foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str")
         """
-    ))
+        )
+    )
     config = Mock(spec=Config)
     result = parse_file(str(path), config)
     assert len(result.items) == 1
