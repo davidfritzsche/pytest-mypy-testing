@@ -74,7 +74,7 @@ class Message:
     )
 
     OUTPUT_RE = re.compile(
-        r"^(?P<fname>[^:]+):"
+        r"^(?P<fname>([a-zA-Z]:)?[^:]+):"
         r"(?P<lineno>[0-9]+):"
         r"((?P<colno>[0-9]+):)?"
         r" *(?P<severity>(error|note|warning)):"
