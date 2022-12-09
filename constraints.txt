@@ -10,7 +10,7 @@ black==22.8.0
 boolean-py==4.0
 build==0.8.0
 bump2version==1.0.1
-certifi==2022.9.14
+certifi==2022.12.7
 chardet==5.0.0
 charset-normalizer==2.1.1
 click==8.1.3
