@@ -64,6 +64,6 @@ tox-pyenv==1.1.0
 typing-extensions==4.3.0
 urllib3==1.26.12
 virtualenv==20.16.5
-wheel==0.37.1
+wheel==0.38.1
 pip==22.2.2
 setuptools==65.3.0
