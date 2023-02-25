@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
     "Typing :: Typed",
 ]
 description-file = "README.md"
@@ -29,8 +30,8 @@ dist-name = "pytest-mypy-testing"
 home-page = "https://github.com/davidfritzsche/pytest-mypy-testing"
 license = "Apache-2.0 OR MIT"
 requires = [
-    "pytest>=6,<8",
-    "mypy",
+    "pytest>=7,<8",
+    "mypy>=0.931",
 ]
 requires-python = ">=3.7"
 
@@ -42,20 +43,11 @@ include = ["src/pytest_mypy_testing/_version.py"]
 
 [tool.black]
 line-length = 88
-target-version = ['py37', 'py38']
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
 include = '\.pyi?$'
-exclude = '''
+extend-exclude = '''
 (
-    /\.eggs/
-  | /\.git/
-  | /\.hg/
-  | /\.mypy_cache/
-  | /\.tox/
-  | /\.venv/
-  | /_build/
-  | /_version\.py
-  | /buck-out/
-  | /build/
+    /_version\.py
   | /dist/
 )
 '''

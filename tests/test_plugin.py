@@ -7,7 +7,6 @@ from unittest.mock import Mock
 
 import pytest
 from _pytest.config import Config
-from py._path.local import LocalPath
 
 from pytest_mypy_testing.message import Severity
 from pytest_mypy_testing.parser import MypyTestFile
@@ -17,6 +16,12 @@ from pytest_mypy_testing.plugin import (
     pytest_collect_file,
 )
 from pytest_mypy_testing.strutil import dedent
+
+
+try:
+    from py._path.local import LocalPath
+except ModuleNotFoundError:
+    from _pytest._py.path import LocalPath
 
 
 PYTEST_VERSION = pytest.__version__
