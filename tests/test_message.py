@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
 
+from typing import Optional
+
 import pytest
 
 from pytest_mypy_testing.message import Message, Severity
@@ -14,26 +16,35 @@ def test_init_severity(string: str, expected: Severity):
 
 
 @pytest.mark.parametrize(
-    "filename,comment,severity,message",
+    "filename,comment,severity,message,error_code",
     [
-        ("z.py", "# E: bar", Severity.ERROR, "bar"),
-        ("z.py", "#type:ignore# W: bar", Severity.WARNING, "bar"),
-        ("z.py", "# type: ignore # W: bar", Severity.WARNING, "bar"),
-        ("z.py", "# R: bar", Severity.NOTE, "Revealed type is 'bar'"),
+        ("z.py", "# E: bar", Severity.ERROR, "bar", None),
+        ("z.py", "# E: bar", Severity.ERROR, "bar", "foo"),
+        ("z.py", "# E: bar [foo]", Severity.ERROR, "bar", "foo"),
+        ("z.py", "# E: bar [foo]", Severity.ERROR, "bar", ""),
+        ("z.py", "#type:ignore# W: bar", Severity.WARNING, "bar", None),
+        ("z.py", "# type: ignore # W: bar", Severity.WARNING, "bar", None),
+        ("z.py", "# R: bar", Severity.NOTE, "Revealed type is 'bar'", None),
     ],
 )
 def test_message_from_comment(
-    filename: str, comment: str, severity: Severity, message: str
+    filename: str,
+    comment: str,
+    severity: Severity,
+    message: str,
+    error_code: Optional[str],
 ):
     lineno = 123
+    actual = Message.from_comment(filename, lineno, comment)
     expected = Message(
         filename=filename,
         lineno=lineno,
         colno=None,
         severity=severity,
         message=message,
+        error_code=error_code,
     )
-    assert Message.from_comment(filename, lineno, comment) == expected
+    assert actual == expected
 
 
 def test_message_from_invalid_comment():

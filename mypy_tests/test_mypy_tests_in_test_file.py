@@ -1,12 +1,15 @@
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
 
+# flake8: noqa
+# ruff: noqa
+
 import pytest
 
 
 @pytest.mark.mypy_testing
 def err():
-    import foo  # E: Cannot find implementation or library stub for module named 'foo'  # noqa
+    import foo  # E: Cannot find implementation or library stub for module named 'foo'
 
 
 @pytest.mark.mypy_testing
