@@ -158,7 +158,6 @@ class PytestMypyFile(pytest.File):
     def _run_mypy(self, filename: Union[pathlib.Path, os.PathLike, str]) -> MypyResult:
         filename = pathlib.Path(filename)
         with tempfile.TemporaryDirectory(prefix="pytest-mypy-testing-") as tmp_dir_name:
-
             mypy_cache_dir = os.path.join(tmp_dir_name, "mypy_cache")
             os.makedirs(mypy_cache_dir)
 

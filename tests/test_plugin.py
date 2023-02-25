@@ -40,7 +40,6 @@ def test_create_mypy_assertion_error():
 
 
 def mk_dummy_parent(tmp_path, filename, content=""):
-
     path = tmp_path / filename
     path.write_text(content)
 

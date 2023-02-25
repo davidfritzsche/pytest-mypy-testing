@@ -111,7 +111,6 @@ def diff_message_sequences(
     for a_chunk, b_chunk in iter_msg_seq_diff_chunks(
         actual_messages, expected_messages
     ):
-
         a_dict = _chunk_to_dict(a_chunk)
         b_dict = _chunk_to_dict(b_chunk)
 

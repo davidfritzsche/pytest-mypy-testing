@@ -19,12 +19,18 @@ exclude =
     runtime/src/prettypb/protobuf/*.py
 
 ignore =
-    F811 # redefinition of unused '...' from line ...
-    W503 # line break before binary operator
-    E203 # whitespace before ':'
-    E231 # missing whitespace after ','
-    E501 # line too long
-    E731 # do not assign a lambda expression, use a def
+    # F811: redefinition of unused '...' from line ...
+    F811
+    # W503: line break before binary operator
+    W503
+    # E203: whitespace before ':'
+    E203
+    # E231: missing whitespace after ','
+    E231
+    # E501:line too long
+    E501
+    # E731: do not assign a lambda expression, use a def
+    E731
 
 builtins = reveal_type
 
