@@ -172,6 +172,7 @@ class PytestMypyFile(pytest.File):
                 "--no-silence-site-packages",
                 "--no-warn-unused-configs",
                 "--show-column-numbers",
+                "--show-error-codes",
                 "--show-traceback",
                 str(filename),
             ]
