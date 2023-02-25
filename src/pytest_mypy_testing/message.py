@@ -61,8 +61,11 @@ class Message:
     severity: Severity
     message: str
     revealed_type: Optional[str] = None
+    error_code: Optional[str] = None
 
-    TupleType = Tuple[str, int, Optional[int], Severity, str, Optional[str]]
+    TupleType = Tuple[
+        str, int, Optional[int], Severity, str, Optional[str], Optional[str]
+    ]
 
     _prefix: str = dataclasses.field(init=False, repr=False, default="")
 
@@ -70,7 +73,9 @@ class Message:
         r"^(?:# *type: *ignore *)?(?:# *)?"
         r"(?P<severity>[RENW]):"
         r"((?P<colno>\d+):)? *"
-        r"(?P<message>[^#]*)(?:#.*?)?$"
+        r"(?P<message>[^#]*?)"
+        r"(?: +\[(?P<error_code>[^\]]*)\])?"
+        r"(?:#.*?)?$"
     )
 
     OUTPUT_RE = re.compile(
@@ -78,7 +83,9 @@ class Message:
         r"(?P<lineno>[0-9]+):"
         r"((?P<colno>[0-9]+):)?"
         r" *(?P<severity>(error|note|warning)):"
-        r"(?P<message>.*)$"
+        r"(?P<message>.*?)"
+        r"(?: +\[(?P<error_code>[^\]]*)\])?"
+        r"$"
     )
 
     _OUTPUT_REVEALED_RE = re.compile(
@@ -130,12 +137,15 @@ class Message:
             self.severity,
             self.normalized_message if normalized else self.message,
             self.revealed_type,
+            self.error_code,
         )
 
     def is_comment(self) -> bool:
         return (self.severity, self.message) in _COMMENT_MESSAGES
 
-    def _as_short_tuple(self, *, normalized: bool = False) -> "Message.TupleType":
+    def _as_short_tuple(
+        self, *, normalized: bool = False, default_error_code: Optional[str] = None
+    ) -> "Message.TupleType":
         if normalized:
             message = self.normalized_message
         else:
@@ -147,14 +157,20 @@ class Message:
             self.severity,
             message,
             self.revealed_type,
+            self.error_code or default_error_code,
         )
 
     def __eq__(self, other):
         if isinstance(other, Message):
+            default_error_code = self.error_code or other.error_code
             if self.colno is None or other.colno is None:
-                return self._as_short_tuple(normalized=True) == other._as_short_tuple(
-                    normalized=True
+                a = self._as_short_tuple(
+                    normalized=True, default_error_code=default_error_code
                 )
+                b = other._as_short_tuple(
+                    normalized=True, default_error_code=default_error_code
+                )
+                return a == b
             else:
                 return self.astuple(normalized=True) == other.astuple(normalized=True)
         else:
@@ -192,6 +208,7 @@ class Message:
             severity=Severity.from_string(m.group("severity")),
             message=message,
             revealed_type=revealed_type,
+            error_code=m.group("error_code") or None,
         )
 
     @classmethod

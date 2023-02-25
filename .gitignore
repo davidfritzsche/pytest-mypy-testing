@@ -1,5 +1,14 @@
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
+
+!.bumpversion.cfg
+!.bumpversion.cfg.license
+!.editorconfig
+!.flake8
+!.gitattributes
+!.gitignore
+!.isort.cfg
+!/.github
 *.bak
 *.egg-info
 *.pyc
