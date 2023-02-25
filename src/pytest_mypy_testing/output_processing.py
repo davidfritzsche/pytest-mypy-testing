@@ -46,9 +46,7 @@ class OutputMismatch:
         def _fmt(msg: Message, actual_expected: str = "", *, indent: str = "  ") -> str:
             if actual_expected:
                 actual_expected += ": "
-            return (
-                f"{indent}{actual_expected}{msg.severity.name.lower()}: {msg.message}"
-            )
+            return msg.to_string(prefix=f"{indent}{actual_expected}")
 
         if not any([self.actual, self.expected]):
             raise ValueError("At least one of actual and expected must be given")
