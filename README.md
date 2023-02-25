@@ -96,6 +96,17 @@ decorators are extracted from the ast.
 
 # Changelog
 
+## v0.0.12
+
+* Allow Windows drives in filename (#17, #34)
+* Support async def tests (#30, #31)
+* Add support for mypy 0.971 (#27)
+* Remove support for Python 3.6 (#32)
+
+## v0.0.11
+
+* Add support for mypy 0.960 (#25)
+
 ## v0.0.10
 
 * Add support for pytest 7.0.x and require Python >= 3.7 (#23)
