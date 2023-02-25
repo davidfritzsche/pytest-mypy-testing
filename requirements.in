@@ -1,6 +1,6 @@
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
-black<23
+black>=23,<24
 bump2version
 coverage[toml]
 dflit
@@ -13,12 +13,13 @@ flake8-pyi
 fsfe-reuse
 invoke
 isort
-mypy==0.971
+mypy~=1.0
 pip-tools
-pip>=19.3
+pip>=20.3
 pytest-cov
 pytest-html
-pytest~=7.1.2
+pytest~=7.2.1
 setuptools>=43
+tox < 4
 tox-pyenv
-tox>=3.14.3
+types-invoke
