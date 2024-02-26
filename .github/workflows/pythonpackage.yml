@@ -5,13 +5,13 @@ name: Python package
 on: [push]
 
 jobs:
-  test-py310:
+  test-py37:
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 4
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.10"]
+        python-version: ["3.7"]
 
     steps:
     - uses: actions/checkout@v3
@@ -28,15 +28,15 @@ jobs:
         TOX_PARALLEL_NO_SPINNER: "1"
       run: |
         inv mkdir build/coverage-data
-        inv tox -e "py310-*"
+        inv tox -e "py37-*"
 
-  test-py37-py38-py39:
+  test-py38-py39-py310:
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 8
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        python-version: ["3.7", "3.8", "3.9"]
+        python-version: ["3.8", "3.9", "3.10"]
 
     steps:
     - uses: actions/checkout@v3

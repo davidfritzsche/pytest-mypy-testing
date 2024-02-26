@@ -137,6 +137,11 @@ decorators are extracted from the ast.
 
 # Changelog
 
+## v0.1.2 (unreleased)
+
+* Add support for pytest 8 (no actual change, but declare support)
+  ([#46][i46], [#47][p47])
+
 ## v0.1.1
 
 * Compare just mypy error codes if given and no error message is given
@@ -204,6 +209,7 @@ decorators are extracted from the ast.
 [i30]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/30
 [i35]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/35
 [i36]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/36
+[i46]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/46
 
 [p6]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/6
 [p7]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/7
@@ -222,3 +228,4 @@ decorators are extracted from the ast.
 [p41]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/41
 [p42]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/42
 [p43]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/43
+[p47]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/47
