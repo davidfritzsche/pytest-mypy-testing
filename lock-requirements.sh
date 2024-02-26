@@ -5,7 +5,16 @@
 
 export CUSTOM_COMPILE_COMMAND="./lock-requirements.sh"
 
-PYTHONWARNINGS=ignore pip-compile --unsafe-package='' --no-emit-index-url --resolver=backtracking "$@"
+export PYTHONWARNINGS=ignore
+
+pip-compile \
+    --unsafe-package='' \
+    --no-emit-index-url \
+    --resolver=backtracking \
+    -o requirements.txt \
+    requirements.in \
+    "$@"
+
 cat >constraints.txt <<EOF
 # SPDX-FileCopyrightText: David Fritzsche
 # SPDX-License-Identifier: CC0-1.0
@@ -16,4 +25,5 @@ cat >constraints.txt <<EOF
 #    ./lock-requirements.sh
 #
 EOF
-sed -E -e 's/(\[.*\])//g' -e  '/^ *#/d' -e '/^$/d' requirements.txt >> constraints.txt
+sed -E -e 's/(\[.*\])//g' -e  '/^ *#/d' -e '/^$/d' requirements.txt >>constraints.txt
+cat constraints.in | grep -v -E '^#' >>constraints.txt

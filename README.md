@@ -131,8 +131,9 @@ decorators are extracted from the ast.
   -U -r requirements.txt`.
 * Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
-  Python 3.7, 3.8, 3.9, 3.10 and 3.11 must be available. You might want to look
-  into using [pyenv](https://github.com/pyenv/pyenv).
+  Python 3.7, 3.8, 3.9, 3.10, 3.11 and 3.12 must be available. You
+  might want to look into using
+  [pyenv](https://github.com/pyenv/pyenv).
 
 
 # Changelog
@@ -141,8 +142,10 @@ decorators are extracted from the ast.
 
 * Add support for pytest 8 (no actual change, but declare support)
   ([#46][i46], [#47][p47])
+* Declare support for Python 3.12 ([#50][p50])
 * Update GitHub actions ([#48][p48])
 * Update development dependencies ([#49][p49])
+* In GitHub PRs run tests with Python 3.11 and 3.12 ([#50][p50])
 
 ## v0.1.1
 
@@ -233,3 +236,4 @@ decorators are extracted from the ast.
 [p47]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/47
 [p48]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/48
 [p49]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/49
+[p50]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/50

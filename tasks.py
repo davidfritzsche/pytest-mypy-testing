@@ -17,9 +17,9 @@ def mkdir(ctx, dirname):
 
 @task
 def pth(ctx):
-    import distutils.sysconfig
+    import sysconfig
 
-    site_packages_dir = distutils.sysconfig.get_python_lib()
+    site_packages_dir = sysconfig.get_path("purelib")
     pth_filename = os.path.join(site_packages_dir, "subprojects.pth")
     with open(pth_filename, "w", encoding="utf-8") as f:
         print(os.path.abspath("src"), file=f)

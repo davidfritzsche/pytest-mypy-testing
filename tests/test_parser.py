@@ -3,6 +3,7 @@
 
 import ast
 import sys
+import typing as _typing
 from tokenize import COMMENT, ENDMARKER, NAME, NEWLINE, NL, TokenInfo
 from unittest.mock import Mock
 
@@ -52,7 +53,7 @@ def test_iter_comments():
     actual = list(generate_per_line_token_lists(source))
 
     # fmt: off
-    expected = [
+    expected:_typing.List[_typing.List[TokenInfo]] = [
         [],  # line 0
         [
             TokenInfo(type=COMMENT, string="# foo", start=(1, 0), end=(1, 5), line="# foo\n",),
@@ -69,6 +70,23 @@ def test_iter_comments():
         ],
     ]
     # fmt: on
+
+    # some patching due to differences between Python versions...
+    for lineno, line_toks in enumerate(actual):
+        for i, tok in enumerate(line_toks):
+            if tok.type == NEWLINE:
+                try:
+                    expected_tok = expected[lineno][i]
+                    if expected_tok.type == NEWLINE:
+                        expected[lineno][i] = TokenInfo(
+                            type=expected_tok.type,
+                            string=expected_tok.string,
+                            start=expected_tok.start,
+                            end=expected_tok.end,
+                            line=tok.line,
+                        )
+                except IndexError:
+                    pass
 
     assert actual == expected
 
