@@ -141,6 +141,7 @@ decorators are extracted from the ast.
 
 * Add support for pytest 8 (no actual change, but declare support)
   ([#46][i46], [#47][p47])
+* Update GitHub actions ([#48][p48])
 
 ## v0.1.1
 
@@ -229,3 +230,4 @@ decorators are extracted from the ast.
 [p42]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/42
 [p43]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/43
 [p47]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/47
+[p48]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/48
