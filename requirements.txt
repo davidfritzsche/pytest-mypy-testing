@@ -44,9 +44,8 @@ docutils==0.20.1
     # via dflit
 exceptiongroup==1.2.0
     # via pytest
-filelock==3.12.2
+filelock==3.13.1
     # via
-    #   -r requirements.in
     #   tox
     #   virtualenv
 flake8==7.0.0
@@ -72,8 +71,6 @@ fsfe-reuse==1.0.0
     # via -r requirements.in
 idna==3.6
     # via requests
-importlib-metadata==6.7.0
-    # via -r requirements.in
 iniconfig==2.0.0
     # via pytest
 invoke==2.2.0
@@ -105,20 +102,18 @@ packaging==23.2
     #   tox
 pathspec==0.12.1
     # via black
-pip==23.1.2
+pip==24.0
     # via
     #   -r requirements.in
     #   pip-tools
 pip-tools==7.4.0
     # via -r requirements.in
-platformdirs==4.0.0
+platformdirs==4.2.0
     # via
-    #   -r requirements.in
     #   black
     #   virtualenv
-pluggy==1.2.0
+pluggy==1.4.0
     # via
-    #   -r requirements.in
     #   pytest
     #   tox
 py==1.11.0
@@ -135,7 +130,7 @@ pyproject-hooks==1.0.0
     # via
     #   build
     #   pip-tools
-pytest==7.4.4
+pytest==8.0.2
     # via
     #   -r requirements.in
     #   pytest-cov
@@ -181,9 +176,8 @@ tox-pyenv==1.1.0
     # via -r requirements.in
 types-invoke==2.0.0.10
     # via -r requirements.in
-typing-extensions==4.7.1
+typing-extensions==4.10.0
     # via
-    #   -r requirements.in
     #   black
     #   mypy
 urllib3==2.2.1
@@ -192,7 +186,3 @@ virtualenv==20.25.1
     # via tox
 wheel==0.42.0
     # via pip-tools
-zipp==3.15.0
-    # via
-    #   -r requirements.in
-    #   importlib-metadata

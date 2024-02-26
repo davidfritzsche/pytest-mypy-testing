@@ -16,7 +16,7 @@ isort
 mypy ~=1.8
 pip
 pip-tools
-pytest <8
+pytest
 pytest-cov
 pytest-html
 setuptools >=69
@@ -24,10 +24,5 @@ tox <4
 tox-pyenv
 types-invoke
 
-# to let the tox setup stay compatible with Python 3.7
-filelock <3.12.3
-importlib-metadata <6.8
-platformdirs <4.1
-pluggy <1.3
-typing-extensions <4.8
-zipp <3.16
+# Consider constraints constraints.in
+-c constraints.in

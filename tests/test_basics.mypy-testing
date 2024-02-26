@@ -6,40 +6,40 @@ import pytest
 
 
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment():
+def mypy_test_invalid_assignment():
     foo = "abc"
     foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str")
 
 
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment_with_error_code():
+def mypy_test_invalid_assignment_with_error_code():
     foo = "abc"
     foo = 123  # E: Incompatible types in assignment (expression has type "int", variable has type "str") [assignment]
 
 
 @pytest.mark.xfail
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment_with_error_code__message_does_not_match():
+def mypy_test_invalid_assignment_with_error_code__message_does_not_match():
     foo = "abc"
     foo = 123  # E: Invalid assignment [assignment]
 
 
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment_only_error_code():
+def mypy_test_invalid_assignment_only_error_code():
     foo = "abc"
     foo = 123  # E: [assignment]
 
 
 @pytest.mark.xfail
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment_only_error_code__error_code_does_not_match():
+def mypy_test_invalid_assignment_only_error_code__error_code_does_not_match():
     foo = "abc"
     foo = 123  # E: [baz]
 
 
 @pytest.mark.xfail
 @pytest.mark.mypy_testing
-def mypy_test_invalid_assginment_no_message_and_no_error_code():
+def mypy_test_invalid_assignment_no_message_and_no_error_code():
     foo = "abc"
     foo = 123  # E:
 
