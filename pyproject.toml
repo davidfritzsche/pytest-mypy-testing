@@ -30,8 +30,8 @@ dist-name = "pytest-mypy-testing"
 home-page = "https://github.com/davidfritzsche/pytest-mypy-testing"
 license = "Apache-2.0 OR MIT"
 requires = [
-    "pytest>=7,<8",
-    "mypy>=0.931",
+    "pytest>=7,<9",
+    "mypy>=1.0",
 ]
 requires-python = ">=3.7"
 
