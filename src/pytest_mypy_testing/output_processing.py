@@ -106,6 +106,17 @@ def diff_message_sequences(
 
     errors: List[OutputMismatch] = []
 
+    # If an expected message has specified to suppress notes on a line, then
+    # drop them before performing the comparison.
+    suppress_notes_lines = {
+        msg.lineno for msg in expected_messages if msg.suppress_notes
+    }
+    actual_messages = [
+        msg
+        for msg in actual_messages
+        if msg.lineno not in suppress_notes_lines or msg.severity != Severity.NOTE
+    ]
+
     for a_chunk, b_chunk in iter_msg_seq_diff_chunks(
         actual_messages, expected_messages
     ):

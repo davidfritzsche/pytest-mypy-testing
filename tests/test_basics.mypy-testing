@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: CC0-1.0
 
 import pytest
+import dataclasses
 
 
 @pytest.mark.mypy_testing
@@ -97,3 +98,11 @@ def mypy_test_xfail_missing_note():
 @pytest.mark.xfail
 def mypy_test_xfail_unexpected_note():
     reveal_type([])  # unexpected message
+
+
+@pytest.mark.mypy_testing
+def mypy_test_suppress_notes():
+    # Check the use of the "O" severity
+    dataclasses.field(default=123, default_factory=lambda: 456) # O: [call-overload]
+    # Check that notes on other lines are not suppressed
+    reveal_type(123) # N: Revealed type is 'Literal[123]?'

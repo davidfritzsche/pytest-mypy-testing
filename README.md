@@ -67,12 +67,17 @@ the file:
 * `# F: <msg>` - we expect a mypy fatal error message
 * `# R: <msg>` - we expect a mypy note message `Revealed type is
   '<msg>'`. This is useful to easily check `reveal_type` output:
+
      ```python
      @pytest.mark.mypy_testing
      def mypy_use_reveal_type():
          reveal_type(123)  # N: Revealed type is 'Literal[123]?'
          reveal_type(456)  # R: Literal[456]?
      ```
+
+* `# O: <msg>` - we expect a mypy error message and additionally suppress any
+  notes on the same line. This is useful to test for errors such as
+  `call-overload` where mypy provides extra details in notes along with the error.
 
 ## mypy Error Code Matching
 
