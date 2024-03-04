@@ -138,7 +138,7 @@ decorators are extracted from the ast.
 
 # Changelog
 
-## unreleased
+## v0.1.3 (2024-03-05)
 
 * Replace usage of deprecated path argument to pytest hook
   ``pytest_collect_file()`` with usage of the file_path argument
