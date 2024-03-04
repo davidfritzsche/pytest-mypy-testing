@@ -42,6 +42,7 @@ mypy-testing = "pytest_mypy_testing.plugin"
 [tool.flit.sdist]
 include = ["src/pytest_mypy_testing/_version.py"]
 
+
 [tool.black]
 line-length = 88
 target-version = ['py37', 'py38', 'py39', 'py310', 'py311', 'py312']
@@ -53,6 +54,7 @@ extend-exclude = '''
 )
 '''
 
+
 [tool.coverage.run]
 include = [
     'src/*',
@@ -61,3 +63,8 @@ include = [
 ]
 data_file = 'build/coverage-data/coverage'
 parallel = true
+
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+lines-after-imports = 2
