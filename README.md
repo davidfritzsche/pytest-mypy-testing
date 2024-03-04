@@ -140,6 +140,9 @@ decorators are extracted from the ast.
 
 ## unreleased
 
+* Replace usage of deprecated path argument to pytest hook
+  ``pytest_collect_file()`` with usage of the file_path argument
+  introduced in pytest 7 ([#51][i51], [#52][p52])
 
 ## v0.1.2 (2024-02-26)
 
@@ -218,6 +221,7 @@ decorators are extracted from the ast.
 [i35]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/35
 [i36]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/36
 [i46]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/46
+[i51]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/51
 
 [p6]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/6
 [p7]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/7
@@ -240,3 +244,4 @@ decorators are extracted from the ast.
 [p48]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/48
 [p49]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/49
 [p50]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/50
+[p52]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/52

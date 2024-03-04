@@ -10,6 +10,7 @@ import mypy.api
 import pytest
 from _pytest._code.code import ReprEntry, ReprFileLocation
 from _pytest.config import Config
+from _pytest.python import path_matches_patterns
 
 from .message import Message, Severity
 from .output_processing import OutputMismatch, diff_message_sequences
@@ -57,12 +58,7 @@ class PytestMypyTestItem(pytest.Item):
 
     @classmethod
     def from_parent(cls, parent, name, mypy_item):
-        if PYTEST_VERSION_INFO < (5, 4):
-            return cls(
-                parent=parent, name=name, config=parent.config, mypy_item=mypy_item
-            )
-        else:
-            return super().from_parent(parent=parent, name=name, mypy_item=mypy_item)
+        return super().from_parent(parent=parent, name=name, mypy_item=mypy_item)
 
     def runtest(self) -> None:
         returncode, actual_messages = self.parent.run_mypy(self.mypy_item)
@@ -75,14 +71,12 @@ class PytestMypyTestItem(pytest.Item):
             raise MypyAssertionError(item=self, errors=errors)
 
     def reportinfo(self) -> Tuple[Union["os.PathLike[str]", str], Optional[int], str]:
-        return self.parent.fspath, self.mypy_item.lineno, self.name
+        return self.parent.path, self.mypy_item.lineno, self.name
 
     def repr_failure(self, excinfo, style=None):
         if not excinfo.errisinstance(MypyAssertionError):
             return super().repr_failure(excinfo, style=style)  # pragma: no cover
-        reprfileloc_key = (
-            "filelocrepr" if PYTEST_VERSION_INFO < (5, 4) else "reprfileloc"
-        )
+        reprfileloc_key = "reprfileloc"
         exception_repr = excinfo.getrepr(style="short")
         exception_repr.reprcrash.message = ""
         exception_repr.reprtraceback.reprentries = [
@@ -93,7 +87,7 @@ class PytestMypyTestItem(pytest.Item):
                 reprfuncargs=None,
                 **{
                     reprfileloc_key: ReprFileLocation(
-                        path=self.parent.fspath,
+                        path=str(self.parent.path),
                         lineno=mismatch.lineno,
                         message=mismatch.error_message,
                     )
@@ -124,19 +118,12 @@ class PytestMypyFile(pytest.File):
             **kwargs,
         )
         self.add_marker("mypy")
-        if PYTEST_VERSION_INFO >= (7,):
-            self.mypy_file = parse_file(self.path, config=config)
-        else:
-            self.mypy_file = parse_file(self.fspath, config=config)
+        self.mypy_file = parse_file(self.path, config=config)
         self._mypy_result: Optional[MypyResult] = None
 
     @classmethod
     def from_parent(cls, parent, **kwargs):
-        if PYTEST_VERSION_INFO < (5, 4):
-            config = getattr(parent, "config", None)
-            return cls(parent=parent, config=config, **kwargs)
-        else:
-            return super().from_parent(parent=parent, **kwargs)
+        return super().from_parent(parent=parent, **kwargs)
 
     def collect(self) -> Iterator[PytestMypyTestItem]:
         for item in self.mypy_file.items:
@@ -146,7 +133,7 @@ class PytestMypyFile(pytest.File):
 
     def run_mypy(self, item: MypyTestItem) -> Tuple[int, List[Message]]:
         if self._mypy_result is None:
-            self._mypy_result = self._run_mypy(self.fspath)
+            self._mypy_result = self._run_mypy(self.path)
         return (
             self._mypy_result.returncode,
             sorted(
@@ -211,31 +198,21 @@ class PytestMypyFile(pytest.File):
         )
 
 
-if PYTEST_VERSION_INFO < (7,):
-
-    def pytest_collect_file(path, parent):
-        if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
-            file = PytestMypyFile.from_parent(parent=parent, fspath=path)
-            if file.mypy_file.items:
-                return file
-        return None
-
-else:
-
-    def pytest_collect_file(file_path, path, parent):  # type: ignore
-        if path.ext == ".mypy-testing" or _is_pytest_test_file(path, parent):
-            file = PytestMypyFile.from_parent(parent=parent, path=file_path)
-            if file.mypy_file.items:
-                return file
-        return None
+def pytest_collect_file(file_path: pathlib.Path, parent):
+    if file_path.suffix == ".mypy-testing" or _is_pytest_test_file(file_path, parent):
+        file = PytestMypyFile.from_parent(parent=parent, path=file_path)
+        if file.mypy_file.items:
+            return file
+    return None
 
 
-def _is_pytest_test_file(path, parent):
+def _is_pytest_test_file(file_path: pathlib.Path, parent):
     """Return `True` if *path* is considered to be a pytest test file."""
     # Based on _pytest/python.py::pytest_collect_file
     fn_patterns = parent.config.getini("python_files") + ["__init__.py"]
-    return path.ext == ".py" and (
-        parent.session.isinitpath(path) or any(path.fnmatch(pat) for pat in fn_patterns)
+    return file_path.suffix == ".py" and (
+        parent.session.isinitpath(file_path)
+        or path_matches_patterns(file_path, fn_patterns)
     )
 
 

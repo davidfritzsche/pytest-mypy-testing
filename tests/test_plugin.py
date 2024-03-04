@@ -18,12 +18,6 @@ from pytest_mypy_testing.plugin import (
 from pytest_mypy_testing.strutil import dedent
 
 
-try:
-    from py._path.local import LocalPath
-except ModuleNotFoundError:
-    from _pytest._py.path import LocalPath
-
-
 PYTEST_VERSION = pytest.__version__
 PYTEST_VERSION_INFO = tuple(int(part) for part in PYTEST_VERSION.split(".")[:3])
 
@@ -33,18 +27,15 @@ NOTE = Severity.NOTE
 WARNING = Severity.WARNING
 
 
-def call_pytest_collect_file(fspath, parent):
-    if PYTEST_VERSION_INFO < (7,):
-        return pytest_collect_file(fspath, parent)
-    else:
-        return pytest_collect_file(pathlib.Path(str(fspath)), fspath, parent)  # type: ignore
+def call_pytest_collect_file(file_path: pathlib.Path, parent):
+    return pytest_collect_file(file_path, parent)
 
 
 def test_create_mypy_assertion_error():
     MypyAssertionError(None, [])
 
 
-def mk_dummy_parent(tmp_path, filename, content=""):
+def mk_dummy_parent(tmp_path: pathlib.Path, filename, content=""):
     path = tmp_path / filename
     path.write_text(content)
 
@@ -59,7 +50,6 @@ def mk_dummy_parent(tmp_path, filename, content=""):
         config=config,
         session=session,
         nodeid="dummy",
-        fspath=LocalPath(path),
         path=path,
     )
 
@@ -69,8 +59,8 @@ def mk_dummy_parent(tmp_path, filename, content=""):
 @pytest.mark.parametrize("filename", ["z.py", "test_z.mypy-testing"])
 def test_pytest_collect_file_not_test_file_name(tmp_path, filename: str):
     parent = mk_dummy_parent(tmp_path, filename)
-    fspath = parent.fspath
-    actual = call_pytest_collect_file(fspath, parent)
+    file_path = parent.path
+    actual = call_pytest_collect_file(file_path, parent)
     assert actual is None
 
 
@@ -89,8 +79,8 @@ def test_pytest_collect_file(tmp_path, filename):
         filename=str(parent.path), source_lines=content.splitlines()
     )
 
-    fspath = parent.fspath
-    actual = call_pytest_collect_file(fspath, parent)
+    file_path = parent.path
+    actual = call_pytest_collect_file(file_path, parent)
     assert isinstance(actual, PytestMypyFile)
 
     assert len(actual.mypy_file.items) == 1
