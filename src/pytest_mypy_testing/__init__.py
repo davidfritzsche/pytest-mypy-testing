@@ -2,4 +2,4 @@
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Pytest plugin to check mypy output."""
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
