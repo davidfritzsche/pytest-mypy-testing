@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2020 David Fritzsche
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 
+import importlib.util
 import os
 import pathlib
 from typing import Dict, Iterable, Iterator, List, NamedTuple, Optional, Tuple, Union
@@ -18,6 +19,8 @@ from .parser import MypyTestItem, parse_file
 
 PYTEST_VERSION = pytest.__version__
 PYTEST_VERSION_INFO = tuple(int(part) for part in PYTEST_VERSION.split(".")[:3])
+
+have_xdist = importlib.util.find_spec("xdist") is not None
 
 
 class MypyResult(NamedTuple):
@@ -51,6 +54,8 @@ class PytestMypyTestItem(pytest.Item):
         self.mypy_item = mypy_item
         for mark in self.mypy_item.marks:
             self.add_marker(mark)
+        if have_xdist:
+            self.add_marker(pytest.mark.xdist_group("mypy"))
 
     @classmethod
     def from_parent(cls, parent, name, mypy_item):
