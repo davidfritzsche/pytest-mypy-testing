@@ -3,7 +3,7 @@
 black >=24,<25
 bump2version
 coverage[toml]
-dflit
+flit >=3.12,<4
 flake8-bugbear
 flake8-comprehensions
 flake8-html

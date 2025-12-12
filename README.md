@@ -140,6 +140,8 @@ decorators are extracted from the ast.
 
 ## Unreleased
 
+* Switch to original `flit` build backend ([#58][p58]).
+
 ## v0.1.3 (2024-03-05)
 
 * Replace usage of deprecated path argument to pytest hook
@@ -205,7 +207,7 @@ decorators are extracted from the ast.
 
 * Update the plugin to work with pytest 5.4 ([#7][p7])
 
-## v0.0.5 - CI improvements
+## v0.0.5 (2020-03-29) - CI improvements
 
 * Make invoke tasks work (partially) on Windows ([#6][p6])
 * Add an invoke task to run tox environments by selecting globs (e.g.,
@@ -247,3 +249,4 @@ decorators are extracted from the ast.
 [p49]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/49
 [p50]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/50
 [p52]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/52
+[p58]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/58

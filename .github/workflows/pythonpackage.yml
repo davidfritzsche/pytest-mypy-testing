@@ -10,16 +10,16 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-22.04, macos-15-intel, windows-2022]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: |
           3.7
-          3.11
+          3.14
     - name: Install dependencies
       run: |
         python -m pip install -c constraints.txt pip
@@ -31,7 +31,7 @@ jobs:
         inv mkdir build/coverage-data
         inv tox -e "py37-*"
 
-  test-py38-py39-py310-py311-py312:
+  test-py:
     runs-on: ${{ matrix.os }}
     strategy:
       max-parallel: 8
