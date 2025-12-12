@@ -144,7 +144,7 @@ def _add_end_lineno_if_missing(tree, line_count: int):
     prev_node: Optional[ast.AST] = None
     for node in ast.iter_child_nodes(tree):
         if prev_node is not None:
-            setattr(prev_node, "end_lineno", node.lineno)  # noqa: B010
+            setattr(prev_node, "end_lineno", getattr(node, "lineno", 0))  # noqa: B010
         prev_node = node
     if prev_node:
         setattr(prev_node, "end_lineno", line_count)  # noqa: B010

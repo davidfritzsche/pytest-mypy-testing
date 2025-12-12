@@ -26,7 +26,7 @@ def pth(ctx):
 
 
 @task(pre=[pth])
-def tox(ctx, parallel="auto", e="ALL"):
+def tox(ctx, e="ALL"):
     import fnmatch
     import itertools
 
@@ -43,7 +43,7 @@ def tox(ctx, parallel="auto", e="ALL"):
             )
         )
     envlist = ",".join(sorted(envs))
-    ctx.run(f"tox --parallel={parallel} -e {envlist}", echo=True, pty=MAYBE_PTY)
+    ctx.run(f"tox -e {envlist}", echo=True, pty=MAYBE_PTY)
 
 
 @task

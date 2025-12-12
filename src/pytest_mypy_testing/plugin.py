@@ -57,7 +57,7 @@ class PytestMypyTestItem(pytest.Item):
             self.add_marker(mark)
 
     @classmethod
-    def from_parent(cls, parent, name, mypy_item):
+    def from_parent(cls, parent, *, name=None, mypy_item=None):  # type: ignore
         return super().from_parent(parent=parent, name=name, mypy_item=mypy_item)
 
     def runtest(self) -> None:
@@ -120,6 +120,8 @@ class PytestMypyFile(pytest.File):
         self.add_marker("mypy")
         self.mypy_file = parse_file(self.path, config=config)
         self._mypy_result: Optional[MypyResult] = None
+        args = getattr(config, "option", None)
+        self._config_file: Optional[str] = getattr(args, "mypy_config_file", None)
 
     @classmethod
     def from_parent(cls, parent, **kwargs):
@@ -148,7 +150,10 @@ class PytestMypyFile(pytest.File):
             mypy_cache_dir = os.path.join(tmp_dir_name, "mypy_cache")
             os.makedirs(mypy_cache_dir)
 
-            mypy_args = [
+            mypy_args: List[str] = []
+            if self._config_file:
+                mypy_args.append("--config-file={}".format(self._config_file))
+            mypy_args += [
                 "--cache-dir={}".format(mypy_cache_dir),
                 "--check-untyped-defs",
                 "--hide-error-context",
@@ -228,6 +233,14 @@ def pytest_configure(config):
     )
     config.addinivalue_line(
         "markers", "mypy: mark mypy tests. Do not add this marker manually!"
+    )
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--mypy-config-file",
+        action="store",
+        default=os.environ.get("PYTEST_MYPY_CONFIG_FILE"),
     )
 
 
