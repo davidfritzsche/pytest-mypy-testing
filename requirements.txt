@@ -34,14 +34,10 @@ coverage[toml]==7.4.3
     # via
     #   -r requirements.in
     #   pytest-cov
-dflit==2.3.0.1
-    # via -r requirements.in
-dflit-core==2.3.0.1
-    # via dflit
 distlib==0.3.8
     # via virtualenv
 docutils==0.20.1
-    # via dflit
+    # via flit
 exceptiongroup==1.2.0
     # via pytest
 filelock==3.13.1
@@ -67,6 +63,10 @@ flake8-mutable==1.2.0
     # via -r requirements.in
 flake8-pyi==24.1.0
     # via -r requirements.in
+flit==3.12.0
+    # via -r requirements.in
+flit-core==3.12.0
+    # via flit
 fsfe-reuse==1.0.0
     # via -r requirements.in
 idna==3.6
@@ -105,6 +105,7 @@ pathspec==0.12.1
 pip==24.0
     # via
     #   -r requirements.in
+    #   flit
     #   pip-tools
 pip-tools==7.4.0
     # via -r requirements.in
@@ -144,12 +145,8 @@ pytest-metadata==3.1.1
     # via pytest-html
 python-debian==0.1.49
     # via reuse
-pytoml==0.1.21
-    # via
-    #   dflit
-    #   dflit-core
 requests==2.31.0
-    # via dflit
+    # via flit
 reuse==3.0.1
     # via fsfe-reuse
 setuptools==69.1.1
@@ -168,6 +165,8 @@ tomli==2.0.1
     #   pyproject-hooks
     #   pytest
     #   tox
+tomli-w==1.2.0
+    # via flit
 tox==3.28.0
     # via
     #   -r requirements.in
