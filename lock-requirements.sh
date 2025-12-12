@@ -7,10 +7,10 @@ export CUSTOM_COMPILE_COMMAND="./lock-requirements.sh"
 
 export PYTHONWARNINGS=ignore
 
-pip-compile \
-    --unsafe-package='' \
+uv pip compile \
     --no-emit-index-url \
-    --resolver=backtracking \
+    --universal \
+    --no-build \
     -o requirements.txt \
     requirements.in \
     "$@"
@@ -26,4 +26,4 @@ cat >constraints.txt <<EOF
 #
 EOF
 sed -E -e 's/(\[.*\])//g' -e  '/^ *#/d' -e '/^$/d' requirements.txt >>constraints.txt
-cat constraints.in | grep -v -E '^#' >>constraints.txt
+# cat constraints.in | grep -v -E '^#' >>constraints.txt

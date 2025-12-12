@@ -3,19 +3,16 @@
 black >=24,<25
 bump2version
 coverage[toml]
-flit >=3.12,<4
 flake8-bugbear
 flake8-comprehensions
 flake8-html
-flake8-logging-format
-flake8-mutable
 flake8-pyi
+flit >=3.12,<4
 fsfe-reuse
 invoke
 isort
-mypy ~=1.8
+mypy ~=1.19.0
 pip
-pip-tools
 pytest
 pytest-cov
 pytest-html
@@ -23,6 +20,4 @@ setuptools >=69
 tox <4
 tox-pyenv
 types-invoke
-
-# Consider constraints constraints.in
--c constraints.in
+uv ~=0.9.17
