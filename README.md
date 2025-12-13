@@ -131,8 +131,8 @@ decorators are extracted from the ast.
   -U -r requirements.txt`.
 * Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
-  Python 3.7, 3.8, 3.9, 3.10, 3.11 and 3.12 must be available. You
-  might want to look into using
+  Python 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13 and 3.14 must be
+  available. You might want to look into using
   [pyenv](https://github.com/pyenv/pyenv).
 
 
@@ -140,12 +140,13 @@ decorators are extracted from the ast.
 
 ## Unreleased
 
+* Add support for Python 3.13 and Python 3.14 ([#60][p60]).
 * Switch to original `flit` build backend ([#58][p58]).
 
 ## v0.1.3 (2024-03-05)
 
 * Replace usage of deprecated path argument to pytest hook
-  ``pytest_collect_file()`` with usage of the file_path argument
+  `pytest_collect_file()` with usage of the file_path argument
   introduced in pytest 7 ([#51][i51], [#52][p52])
 
 ## v0.1.2 (2024-02-26)
@@ -157,12 +158,12 @@ decorators are extracted from the ast.
 * Update development dependencies ([#49][p49])
 * In GitHub PRs run tests with Python 3.11 and 3.12 ([#50][p50])
 
-## v0.1.1
+## v0.1.1 (2023-02-25)
 
 * Compare just mypy error codes if given and no error message is given
   in the test case Python comment ([#36][i36], [#43][p43])
 
-## v0.1.0
+## v0.1.0 (2023-02-25)
 
 * Implement support for flexible matching of mypy error codes (towards
   [#36][i36], [#41][p41])
@@ -172,7 +173,7 @@ decorators are extracted from the ast.
 * Drop support for pytest 6.x ([#42][p42])
 * Drop support for mypy versions less than 0.931 ([#42][p42])
 
-## v0.0.12
+## v0.0.12 (2023-02-25)
 
 * Allow Windows drives in filename ([#17][i17], [#34][p34])
 * Support async def tests ([#30][i30], [#31][p31])
@@ -180,30 +181,30 @@ decorators are extracted from the ast.
 * Remove support for Python 3.6 ([#32][p32])
 * Bump development dependencies ([#40][p40])
 
-## v0.0.11
+## v0.0.11 (2022-05-30)
 
 * Add support for mypy 0.960 ([#25][p25])
 
-## v0.0.10
+## v0.0.10 (2022-03-02)
 
 * Add support for pytest 7.0.x and require Python >= 3.7 ([#23][p23])
 * Bump dependencies ([#24][p24])
 
-## v0.0.9
+## v0.0.9 (2021-12-27)
 
 * Disable soft error limit ([#21][p21])
 
-## v0.0.8
+## v0.0.8 (2021-06-13)
 
 * Normalize messages to enable support for mypy 0.902 and pytest 6.2.4 ([#20][p20])
 
-## v0.0.7
+## v0.0.7 (2020-04-25)
 
 * Fix `PYTEST_VERSION_INFO` - by [@blueyed](https://github.com/blueyed) ([#8][p8])
 * Always pass `--check-untyped-defs` to mypy ([#11][p11])
 * Respect pytest config `python_files` when identifying pytest test modules ([#12][p12])
 
-## v0.0.6 - add pytest 5.4 support
+## v0.0.6 (2020-03-29) - add pytest 5.4 support
 
 * Update the plugin to work with pytest 5.4 ([#7][p7])
 
@@ -217,6 +218,14 @@ decorators are extracted from the ast.
 * Use flit fork dflit to make packaging work with `LICENSES` directory
   ([#6][p6])
 * Bump dependencies ([#6][p6])
+
+## v0.0.4 (2020-01-16)
+
+## v0.0.3 (2020-01-07)
+
+## v0.0.2 (2020-01-05)
+
+## v0.0.1 (2020-01-05)
 
 
 [i17]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/17
@@ -250,3 +259,4 @@ decorators are extracted from the ast.
 [p50]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/50
 [p52]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/52
 [p58]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/58
+[p60]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/60
