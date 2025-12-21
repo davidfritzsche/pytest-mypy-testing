@@ -41,6 +41,7 @@ _string_to_severity = {
     "W": Severity.WARNING,
     "E": Severity.ERROR,
     "F": Severity.FATAL,
+    "O": Severity.ERROR,
 }
 
 _COMMENT_MESSAGES = frozenset(
@@ -64,6 +65,7 @@ class Message:
     message: str = ""
     revealed_type: Optional[str] = None
     error_code: Optional[str] = None
+    suppress_notes: bool = False
 
     TupleType = Tuple[
         str, int, Optional[int], Severity, str, Optional[str], Optional[str]
@@ -73,7 +75,7 @@ class Message:
 
     COMMENT_RE = re.compile(
         r"^(?:# *type: *ignore *)?(?:# *)?"
-        r"(?P<severity>[RENW]):"
+        r"(?P<severity>[RENWO]):"
         r"((?P<colno>\d+):)?"
         r" *"
         r"(?P<message_and_error_code>[^#]*)"
@@ -239,9 +241,11 @@ class Message:
         """Create message object from Python *comment*.
 
         >>> Message.from_comment("foo.py", 1, "R: foo")
-        Message(filename='foo.py', lineno=1, colno=None, severity=Severity.NOTE, message="Revealed type is 'foo'", revealed_type='foo', error_code=None)
+        Message(filename='foo.py', lineno=1, colno=None, severity=Severity.NOTE, message="Revealed type is 'foo'", revealed_type='foo', error_code=None, suppress_notes=False)
         >>> Message.from_comment("foo.py", 1, "E: [assignment]")
-        Message(filename='foo.py', lineno=1, colno=None, severity=Severity.ERROR, message='', revealed_type=None, error_code='assignment')
+        Message(filename='foo.py', lineno=1, colno=None, severity=Severity.ERROR, message='', revealed_type=None, error_code='assignment', suppress_notes=False)
+        >>> Message.from_comment("foo.py", 1, "O: [call-overload]")
+        Message(filename='foo.py', lineno=1, colno=None, severity=Severity.ERROR, message='', revealed_type=None, error_code='call-overload', suppress_notes=True)
         """
         m = cls.COMMENT_RE.match(comment.strip())
         if not m:
@@ -250,11 +254,15 @@ class Message:
         message, error_code = cls.__split_message_and_error_code(
             m.group("message_and_error_code")
         )
+
+        suppress_notes = False
+        revealed_type = None
         if m.group("severity") == "R":
             revealed_type = message
             message = "Revealed type is {!r}".format(message)
-        else:
-            revealed_type = None
+        elif m.group("severity") == "O":
+            suppress_notes = True
+
         return Message(
             str(filename),
             lineno=lineno,
@@ -263,6 +271,7 @@ class Message:
             message=message,
             revealed_type=revealed_type,
             error_code=error_code,
+            suppress_notes=suppress_notes,
         )
 
     @classmethod
