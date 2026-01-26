@@ -138,7 +138,7 @@ decorators are extracted from the ast.
 
 # Changelog
 
-## Unreleased
+## v0.1.4 (2026-01-26)
 
 * Remove upper limit of supported pytest version ([#61][i61], [#62][p62]).
 * Add support for Python 3.13 and Python 3.14 ([#60][p60]).
