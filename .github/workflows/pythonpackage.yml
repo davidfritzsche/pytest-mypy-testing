@@ -21,22 +21,19 @@ jobs:
         python-version: |
           ${{ matrix.python-version }}
           3.14
-    - name: Install dependencies
-      run: |
-        python -m pip install -c constraints.txt pip
-        python -m pip install -c constraints.txt invoke tox
+    - uses: astral-sh/setup-uv@v7
     - name: Run tox
       env:
         TOX_PARALLEL_NO_SPINNER: "1"
       run: |
-        inv mkdir build/coverage-data
-        inv tox -e "py-*"
+        uv run --frozen invoke mkdir build/coverage-data
+        uv run --frozen invoke tox -e "py-*"
 
 
   lint:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
+      max-parallel: 1
       matrix:
         python-version: ["3.14"]
 
@@ -46,20 +43,6 @@ jobs:
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install -c constraints.txt black flake8 flake8-isort mypy pytest
-        pip list
-    - name: Run black
-      run: |
-        black --check --diff .
-    - name: Run mypy
-      run: |
-        mypy src tests
-    - name: Run isort
-      run: |
-        isort . --check --diff
-    - name: Run flake8
-      run: |
-        flake8 --help
-        flake8 -v
+    - uses: astral-sh/setup-uv@v7
+    - run: uv run --frozen --only-group=tox tox run -e ruff
+    - run: uv run --frozen --only-group=tox tox run -e mypy

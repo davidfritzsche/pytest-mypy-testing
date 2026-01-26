@@ -94,9 +94,9 @@ def test_output_mismatch_actual_lineno_or_severity_without_actual():
     om = OutputMismatch(expected=[msg])
 
     with pytest.raises(RuntimeError):
-        om.actual_lineno
+        om.actual_lineno  # noqa: B018
     with pytest.raises(RuntimeError):
-        om.actual_severity
+        om.actual_severity  # noqa: B018
 
 
 def test_output_mismatch_expected_lineno_or_severity_without_expected():
@@ -104,9 +104,9 @@ def test_output_mismatch_expected_lineno_or_severity_without_expected():
     om = OutputMismatch(actual=[msg])
 
     with pytest.raises(RuntimeError):
-        om.expected_lineno
+        om.expected_lineno  # noqa: B018
     with pytest.raises(RuntimeError):
-        om.expected_severity
+        om.expected_severity  # noqa: B018
 
 
 def test_output_mismatch_line_number_mismatch():

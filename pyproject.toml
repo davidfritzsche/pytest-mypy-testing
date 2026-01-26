@@ -46,8 +46,106 @@ mypy-testing = "pytest_mypy_testing.plugin"
 
 
 
-[tool.flit.sdist]
-include = ["src/pytest_mypy_testing/_version.py"]
+[dependency-groups]
+build = [
+    "flit-core>=3.12,<4",
+]
+dev = [
+    {include-group = "build"},
+    {include-group = "ruff"},
+    {include-group = "tox"},
+    "bump2version>=1.0.1",
+    "flit>=3.12.0",
+    "fsfe-reuse>=1.0.0",
+    "invoke>=2.2.1",
+    "pip>=25.3",
+    "types-invoke>=2.0.0.10",
+    "uv>=0.9.26",
+]
+mypy = [
+    {include-group = "mypy-1-19"},
+]
+mypy-1-14 = [
+    "mypy~=1.14.0",
+]
+mypy-1-15 = [
+    "mypy~=1.15.0",
+]
+mypy-1-19 = [
+    "mypy~=1.19.1",
+]
+mypy-1-8 = [
+    "mypy~=1.8.0",
+]
+mypy-1-9 = [
+    "mypy~=1.9.0",
+]
+pytest = [
+    {include-group = "pytest-9-0"},
+    {include-group = "pytest-plugins"},
+]
+pytest-8-0 = [
+    "pytest~=8.0.2",
+]
+pytest-8-1 = [
+    "pytest~=8.1.2",
+]
+pytest-8-3 = [
+    "pytest~=8.3.5",
+]
+pytest-8-4 = [
+    "pytest~=8.4.2",
+]
+pytest-9-0 = [
+    "pytest~=9.0.2",
+]
+pytest-plugins = [
+    "coverage[toml]>=7.13.2",
+    "pytest-cov>=7.0.0",
+]
+ruff = [
+    "ruff>=0.14.14",
+]
+tox = [
+    "tox>=4.34.1",
+    "tox-uv>=1.29.0",
+]
+typechecking = [
+    "pytest",
+    "types-invoke>=2.0.0.10",
+]
+
+
+
+[tool.uv]
+package = true
+default-groups = [
+    "dev",
+    "mypy",
+    "pytest",
+]
+conflicts = [
+    [
+        { group = "mypy" },
+        { group = "mypy-1-8" },
+        { group = "mypy-1-9" },
+        { group = "mypy-1-14" },
+        { group = "mypy-1-15" },
+        { group = "mypy-1-19" },
+    ],
+    [
+        { group = "pytest" },
+        { group = "pytest-8-0" },
+        { group = "pytest-8-1" },
+        { group = "pytest-8-3" },
+        { group = "pytest-8-4" },
+        { group = "pytest-9-0" },
+    ],
+]
+
+[[tool.uv.index]]
+url = "https://pypi.org/simple"
+default = true
 
 
 
@@ -75,6 +173,25 @@ parallel = true
 
 
 
+[tool.ruff]
+# See https://docs.astral.sh/ruff/configuration/
+line-length = 88
+target-version = "py310"
+src = ["src"]
+
+[tool.ruff.lint]
+extend-select = [
+    "B",  # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "I",  # isort
+]
+
+[tool.ruff.lint.flake8-pytest-style]
+parametrize-names-type = "csv"
+
 [tool.ruff.lint.isort]
 combine-as-imports = true
 lines-after-imports = 2
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"

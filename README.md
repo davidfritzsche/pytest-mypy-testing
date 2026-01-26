@@ -126,20 +126,19 @@ decorators are extracted from the ast.
 
 # Development
 
-* Create and activate a Python virtual environment.
-* Install development dependencies by calling `python -m pip install
-  -U -r requirements.txt`.
+* Ensure that [uv](https://docs.astral.sh/uv/) is available.
+* Create the development virtual environment by calling `uv sync`.
 * Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
   Python 3.10, 3.11, 3.12, 3.13 and 3.14 must be
-  available. You might want to look into using
-  [pyenv](https://github.com/pyenv/pyenv).
+  available.
 
 
 # Changelog
 
 ## Unreleased
 
+* Modernize project using ruff and uv ([#65][p65])
 * Require pytest >= 8 ([#64][p64])
 * Remove support for Python 3.7, 3.8 and 3.9.
   Require at least Python 3.10 ([#63][p63])
@@ -272,3 +271,4 @@ decorators are extracted from the ast.
 [p62]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/62
 [p63]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/63
 [p64]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/64
+[p65]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/65

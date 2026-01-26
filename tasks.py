@@ -16,16 +16,6 @@ def mkdir(ctx, dirname):
 
 
 @task
-def pth(ctx):
-    import sysconfig
-
-    site_packages_dir = sysconfig.get_path("purelib")
-    pth_filename = os.path.join(site_packages_dir, "subprojects.pth")
-    with open(pth_filename, "w", encoding="utf-8") as f:
-        print(os.path.abspath("src"), file=f)
-
-
-@task(pre=[pth])
 def tox(ctx, e="ALL"):
     import fnmatch
     import itertools
@@ -48,48 +38,27 @@ def tox(ctx, e="ALL"):
 
 @task
 def mypy(ctx):
-    ctx.run("mypy src tests", echo=True, pty=MAYBE_PTY)
+    ctx.run("mypy", echo=True, pty=MAYBE_PTY)
 
 
 @task
-def flake8(ctx):
-    ctx.run("flake8", echo=True, pty=MAYBE_PTY)
-
-
-@task(pre=[pth])
-def pytest(ctx):
-    cmd = [
-        "pytest",
-        # "-s",
-        # "--log-cli-level=DEBUG",
-        "--cov=pytest_mypy_testing",
-        "--cov-report=html:build/cov_html",
-        "--cov-report=term:skip-covered",
-    ]
-    ctx.run(" ".join(cmd), echo=True, pty=MAYBE_PTY)
+def ruff(ctx):
+    ctx.run("ruff check .", echo=True, pty=MAYBE_PTY)
 
 
 @task
-def black(ctx):
-    ctx.run("black --check --diff .", echo=True, pty=MAYBE_PTY)
+def ruff_format(ctx):
+    ctx.run("ruff format --check .", echo=True, pty=MAYBE_PTY)
+
+
+@task
+def ruff_reformat(ctx):
+    ctx.run("ruff format .", echo=True, pty=MAYBE_PTY)
 
 
 @task
 def reuse_lint(ctx):
     ctx.run("reuse lint", echo=True, pty=MAYBE_PTY)
-
-
-@task
-def black_reformat(ctx):
-    ctx.run("black .", echo=True, pty=MAYBE_PTY)
-
-
-@task
-def lock_requirements(ctx, upgrade=False):
-    cmd = "pip-compile --allow-unsafe --no-index"
-    if upgrade:
-        cmd += " --upgrade"
-    ctx.run(cmd, env={"CUSTOM_COMPILE_COMMAND": cmd}, echo=True, pty=MAYBE_PTY)
 
 
 @task
@@ -106,6 +75,6 @@ def publish(ctx, repository="testpypi"):
     ctx.run(cmd, echo=True, pty=MAYBE_PTY)
 
 
-@task(pre=[mypy, pytest, flake8])
+@task(pre=[mypy, ruff, ruff_format, reuse_lint])
 def check(ctx):
     pass

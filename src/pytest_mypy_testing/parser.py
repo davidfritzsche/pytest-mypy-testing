@@ -159,7 +159,7 @@ def _find_marks(func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef]) -> Set[
 
 
 def _iter_func_decorators(
-    func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef]
+    func_node: Union[ast.FunctionDef, ast.AsyncFunctionDef],
 ) -> Iterator[Tuple[str, ast.AST]]:
     def dotted(*nodes):
         return ".".join(_get_node_name(node) for node in reversed(nodes))
