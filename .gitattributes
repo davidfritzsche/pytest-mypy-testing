@@ -10,19 +10,20 @@
 * text=auto
 
 # Pure text files: Use LF in repo and checkout
-*.c text eol=lf
 *.cfg text eol=lf
 *.in text eol=lf
 *.ini text eol=lf
+*.license text eol=lf
 *.md text eol=lf
-*.proto text eol=lf
 *.puml text eol=lf
 *.py text eol=lf
 *.rst text eol=lf
 *.sh text eol=lf
+*.toml text eol=lf
 *.txt text eol=lf
 *.typed text eol=lf
 *.yml text eol=lf
+*.mypy-testing text eol=lf gitlab-language=python linguist-language=Python
 .editorconfig text eol=lf
 .gitattributes text eol=lf
 .gitignore text eol=lf
@@ -37,3 +38,6 @@ pylintrc text eol=lf
 *.exe -text
 *.inv -text
 *.png -text
+
+
+uv.lock gitlab-generated linguist-generated=true
