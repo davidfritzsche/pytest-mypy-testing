@@ -140,6 +140,7 @@ decorators are extracted from the ast.
 
 ## Unreleased
 
+* Remove upper limit of supported pytest version ([#61][i61], [#62][p62]).
 * Add support for Python 3.13 and Python 3.14 ([#60][p60]).
 * Switch to original `flit` build backend ([#58][p58]).
 
@@ -235,6 +236,7 @@ decorators are extracted from the ast.
 [i36]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/36
 [i46]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/46
 [i51]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/51
+[i61]: https://github.com/davidfritzsche/pytest-mypy-testing/issues/61
 
 [p6]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/6
 [p7]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/7
@@ -260,3 +262,4 @@ decorators are extracted from the ast.
 [p52]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/52
 [p58]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/58
 [p60]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/60
+[p62]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/62

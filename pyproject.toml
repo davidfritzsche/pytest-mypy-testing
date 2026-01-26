@@ -34,7 +34,7 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "pytest>=7,<9",
+    "pytest>=7",
     "mypy>=1.0",
 ]
 dynamic = ["version"]
