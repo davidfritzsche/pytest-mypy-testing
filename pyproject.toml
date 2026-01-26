@@ -31,13 +31,15 @@ classifiers = [
     "Typing :: Typed",
 ]
 dependencies = [
-    "pytest>=7",
+    "pytest>=8",
     "mypy>=1.0",
 ]
 dynamic = ["version"]
 
 [project.urls]
-source = "https://github.com/davidfritzsche/pytest-mypy-testing"
+github = "https://github.com/davidfritzsche/pytest-mypy-testing"
+download = "https://pypi.org/project/pytest-mypy-testing/"
+issues = "https://github.com/davidfritzsche/pytest-mypy-testing/issues"
 
 [project.entry-points.pytest11]
 mypy-testing = "pytest_mypy_testing.plugin"
