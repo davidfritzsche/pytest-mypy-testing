@@ -131,18 +131,23 @@ decorators are extracted from the ast.
   -U -r requirements.txt`.
 * Start developing.
 * To run all tests with [tox](https://tox.readthedocs.io/en/latest/),
-  Python 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13 and 3.14 must be
+  Python 3.10, 3.11, 3.12, 3.13 and 3.14 must be
   available. You might want to look into using
   [pyenv](https://github.com/pyenv/pyenv).
 
 
 # Changelog
 
+## upcoming
+
+* Remove support for Python 3.7, 3.8 and 3.9.
+  Require at least Python 3.10 ([#63][p63])
+
 ## v0.1.4 (2026-01-26)
 
-* Remove upper limit of supported pytest version ([#61][i61], [#62][p62]).
-* Add support for Python 3.13 and Python 3.14 ([#60][p60]).
-* Switch to original `flit` build backend ([#58][p58]).
+* Remove upper limit of supported pytest version ([#61][i61], [#62][p62])
+* Add support for Python 3.13 and Python 3.14 ([#60][p60])
+* Switch to original `flit` build backend ([#58][p58])
 
 ## v0.1.3 (2024-03-05)
 
@@ -263,3 +268,4 @@ decorators are extracted from the ast.
 [p58]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/58
 [p60]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/60
 [p62]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/62
+[p63]: https://github.com/davidfritzsche/pytest-mypy-testing/pull/63
