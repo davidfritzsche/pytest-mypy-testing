@@ -136,7 +136,7 @@ decorators are extracted from the ast.
 
 # Changelog
 
-## Unreleased
+## v0.2.0 (2026-01-26)
 
 * Modernize project using ruff and uv ([#65][p65])
 * Require pytest >= 8 ([#64][p64])
