@@ -99,6 +99,9 @@ class Message:
 
     _INFERRED_TYPE_ASTERISK_RE = re.compile("(?<=[A-Za-z])[*]")
 
+    # mypy 1.20+ omits the ``builtins.`` module prefix from reveal_type notes.
+    _BUILTINS_MODULE_PREFIX_RE = re.compile(r"\bbuiltins\.")
+
     def __post_init__(self):
         parts = [self.filename, str(self.lineno)]
         if self.colno:
@@ -116,6 +119,17 @@ class Message:
             )
 
     @property
+    def normalized_revealed_type(self) -> Optional[str]:
+        """Revealed type with a stable ``builtins.`` prefix.
+
+        mypy 1.20+ writes ``int`` instead of ``builtins.int``.  Comparison
+        strips the prefix so older expected ``R:`` comments still match.
+        """
+        if not self.revealed_type:
+            return self.revealed_type
+        return self._BUILTINS_MODULE_PREFIX_RE.sub("", self.revealed_type)
+
+    @property
     def normalized_message(self) -> str:
         """Normalized message.
 
@@ -124,7 +138,7 @@ class Message:
         "Revealed type is 'float'"
         """
         if self.revealed_type:
-            return "Revealed type is {!r}".format(self.revealed_type)
+            return "Revealed type is {!r}".format(self.normalized_revealed_type)
         else:
             return self.message.replace("'", '"')
 
@@ -141,7 +155,7 @@ class Message:
             self.colno,
             self.severity,
             self.normalized_message if normalized else self.message,
-            self.revealed_type,
+            self.normalized_revealed_type if normalized else self.revealed_type,
             self.error_code,
         )
 
@@ -165,12 +179,17 @@ class Message:
             None,
             self.severity,
             message or default_message,
-            self.revealed_type,
+            self.normalized_revealed_type if normalized else self.revealed_type,
             self.error_code or default_error_code,
         )
 
     def __hash__(self) -> int:
-        t = (self.filename, self.lineno, self.severity, self.revealed_type)
+        t = (
+            self.filename,
+            self.lineno,
+            self.severity,
+            self.normalized_revealed_type,
+        )
         return hash(t)
 
     def __eq__(self, other):
