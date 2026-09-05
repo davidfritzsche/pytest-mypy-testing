@@ -111,3 +111,35 @@ def test_message_hash():
 def test_message_str():
     assert str(MSG_WITHOUT_COL) == "z.py:13: note: foo"
     assert str(MSG_WITH_COL) == "z.py:13:23: note: foo"
+
+
+@pytest.mark.parametrize(
+    "expected_comment,actual_message",
+    [
+        ("# R: builtins.int", 'Revealed type is "int"'),
+        ("# R: int", 'Revealed type is "builtins.int"'),
+        ("# R: builtins.list[builtins.int]", 'Revealed type is "list[int]"'),
+        ("# R: list[int]", 'Revealed type is "builtins.list[builtins.int]"'),
+        ("# R: builtins.float", "Revealed type is 'float'"),
+    ],
+)
+def test_reveal_type_equates_builtins_prefix(
+    expected_comment: str, actual_message: str
+):
+    """mypy 1.20 dropped the builtins. prefix from reveal_type notes.
+
+    Expected comments written for older mypy (R: builtins.int) must still
+    match actual notes that omit the prefix (Revealed type is "int"), and
+    the reverse must also match.
+    """
+    expected = Message.from_comment("z.py", 1, expected_comment)
+    actual = Message("z.py", 1, None, Severity.NOTE, actual_message)
+    assert expected == actual
+    assert actual == expected
+    assert hash(expected) == hash(actual)
+
+
+def test_reveal_type_builtins_prefix_does_not_equate_different_types():
+    expected = Message.from_comment("z.py", 1, "# R: builtins.int")
+    actual = Message("z.py", 1, None, Severity.NOTE, 'Revealed type is "str"')
+    assert expected != actual
